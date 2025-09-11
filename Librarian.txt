@@ -1,0 +1,43 @@
+Librarian:
+
+   1.   Emma Johnson
+		Email: emma.johnson@example.com
+		Password: Emma@123
+
+   2.   Liam Smith
+		Email: liam.smith@example.com
+		Password: Liam@123
+
+   3.   Olivia Brown
+		Email: olivia.brown@example.com
+		Password: Olivia@123
+
+   4.   Noah Davis
+		Email: noah.davis@example.com
+		Password: Noah@123
+
+   5.   Ava Wilson
+		Email: ava.wilson@example.com
+		Password: Ava@123
+
+Patron:
+
+   1.   John Doe
+		Email: john.doe@example.com
+		Password: John@123
+
+   2.   Jane Smith
+		Email: jane.smith@example.com
+		Password: Jane@123
+
+   3.   Mark Lee
+		Email: mark.lee@example.com
+		Password: Mark@123
+
+Admin :
+   1.   Admin
+		Email: admin123@gmail.com
+		Password: Admin@123
+
+
+.\mysqldump -u root -p --host=127.0.0.1 --port=3307 lms > "C:\Users\DELL\OneDrive\Desktop\lms.sql"

@@ -1,0 +1,14 @@
+diff --git a/node_modules/@prisma/client/generator-build/index.js b/node_modules/@prisma/client/generator-build/index.js
+index 897d376..ebc9e42 100644
+--- a/node_modules/@prisma/client/generator-build/index.js
++++ b/node_modules/@prisma/client/generator-build/index.js
+@@ -5959,7 +5959,8 @@ var require_env_paths = __commonJS({
+       };
+     };
+     var windows2 = (name) => {
+-      const appData = env3.APPDATA || path11.join(homedir, "AppData", "Roaming");
++      // const appData = env3.APPDATA || path11.join(homedir, "AppData", "Roaming");
++      const appData = env3.APPDATA || path11.join(homedir || "", "AppData", "Roaming");
+       const localAppData = env3.LOCALAPPDATA || path11.join(homedir, "AppData", "Local");
+       return {
+         // Data/config/cache/log are invented by me as Windows isn't opinionated about this
