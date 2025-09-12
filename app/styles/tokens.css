@@ -1,0 +1,294 @@
+/* Nova Theme Design Tokens */
+
+:root {
+  /* Colors - Light Theme */
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 262 83% 58%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 262 83% 58%;
+  --radius: 1rem;
+  
+  /* Nova Specific Colors */
+  --nova-primary: 262 83% 58%;
+  --nova-secondary: 195 100% 50%;
+  --nova-accent: 320 100% 50%;
+  --nova-success: 142 76% 36%;
+  --nova-warning: 38 92% 50%;
+  --nova-error: 0 84% 60%;
+  --nova-info: 199 89% 48%;
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-backdrop: blur(16px);
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-nova: 0 8px 32px 0 rgba(139, 92, 246, 0.37);
+  --shadow-nova-lg: 0 20px 40px 0 rgba(139, 92, 246, 0.2);
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  --radius-full: 9999px;
+  
+  /* Z-Index */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+  
+  /* Animation Durations */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 750ms;
+  
+  /* Animation Easings */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Dark Theme */
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 262 83% 58%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 262 83% 58%;
+  
+  /* Dark Glassmorphism */
+  --glass-bg: rgba(0, 0, 0, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+    --duration-slower: 0ms;
+  }
+}
+
+/* Custom Properties for Components */
+.nova-gradient {
+  background: linear-gradient(135deg, hsl(var(--nova-primary)) 0%, hsl(var(--nova-secondary)) 50%, hsl(var(--nova-accent)) 100%);
+}
+
+.nova-glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop);
+  border: 1px solid var(--glass-border);
+}
+
+.nova-shadow {
+  box-shadow: var(--shadow-nova);
+}
+
+.nova-shadow-lg {
+  box-shadow: var(--shadow-nova-lg);
+}
+
+/* Animation Keyframes */
+@keyframes nova-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes nova-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes nova-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes nova-bounce {
+  0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+  50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+}
+
+@keyframes nova-fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes nova-slide-in-right {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes nova-slide-in-left {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes nova-scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes nova-typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes nova-blink {
+  0%, 50% { border-color: transparent; }
+  51%, 100% { border-color: currentColor; }
+}
+
+/* Utility Classes */
+.animate-nova-float {
+  animation: nova-float 3s ease-in-out infinite;
+}
+
+.animate-nova-pulse {
+  animation: nova-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-nova-spin {
+  animation: nova-spin 1s linear infinite;
+}
+
+.animate-nova-bounce {
+  animation: nova-bounce 1s infinite;
+}
+
+.animate-nova-fade-in {
+  animation: nova-fade-in 0.6s ease-out;
+}
+
+.animate-nova-slide-in-right {
+  animation: nova-slide-in-right 0.6s ease-out;
+}
+
+.animate-nova-slide-in-left {
+  animation: nova-slide-in-left 0.6s ease-out;
+}
+
+.animate-nova-scale-in {
+  animation: nova-scale-in 0.4s ease-out;
+}
+
+.animate-nova-typewriter {
+  animation: nova-typewriter 3s steps(40, end), nova-blink 0.75s step-end infinite;
+  border-right: 2px solid;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Focus Styles */
+.focus-nova {
+  @apply focus:outline-none focus:ring-2 focus:ring-ring;
+}
+
+/* Glassmorphism Components */
+.glass-card {
+  @apply nova-glass rounded-2xl p-6 shadow-xl;
+}
+
+.glass-button {
+  @apply nova-glass rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:bg-opacity-20 focus-nova;
+}
+
+/* Gradient Text */
+.gradient-text {
+  @apply bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent;
+}
+
+/* Hover Effects */
+.hover-lift {
+  @apply transition-transform duration-300 hover:scale-105 hover:shadow-lg;
+}
+
+.hover-glow {
+  @apply transition-all duration-300 hover:shadow-nova;
+}
+
+/* Loading States */
+.loading-skeleton {
+  @apply animate-pulse bg-muted rounded;
+}
+
+/* Scrollbar Styling */
+.scrollbar-nova {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground)) transparent;
+}
+
+.scrollbar-nova::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-nova::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-nova::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 3px;
+}
+
+.scrollbar-nova::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--foreground));
+}

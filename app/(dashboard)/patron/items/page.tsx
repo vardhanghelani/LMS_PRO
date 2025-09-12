@@ -1,6 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { AppShell } from '@/app/components/shell/AppShell';
+import { Button } from '@/app/components/ui/button';
 import PatronItemsClient from '@/app/(dashboard)/patron/items/PatronItemsClient';
 
 interface LibraryItem {
@@ -57,34 +61,51 @@ export default function PatronItemsPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto"></div>
-                    <p className="text-gray-600 mt-4 text-lg">Loading library items...</p>
-                </div>
-            </div>
+            <AppShell userRole="patron" userName="Patron User" userEmail="patron@nova.com">
+                <motion.div 
+                    className="flex items-center justify-center py-20"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="text-center">
+                        <motion.div 
+                            className="w-16 h-16 border-4 border-nova-primary/20 border-t-nova-primary rounded-full mx-auto mb-4"
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        />
+                        <p className="text-muted-foreground text-lg">Loading library items...</p>
+                    </div>
+                </motion.div>
+            </AppShell>
         );
     }
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+            <AppShell userRole="patron" userName="Patron User" userEmail="patron@nova.com">
+                <motion.div 
+                    className="flex items-center justify-center py-20"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="text-center">
+                        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <AlertTriangle className="w-8 h-8 text-red-600" />
+                        </div>
+                        <h3 className="text-xl font-semibold text-foreground mb-2">Error Loading Items</h3>
+                        <p className="text-muted-foreground mb-6">{error}</p>
+                        <Button 
+                            onClick={() => window.location.reload()} 
+                            variant="nova"
+                        >
+                            <RefreshCw className="w-4 h-4 mr-2" />
+                            Try Again
+                        </Button>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">Error Loading Items</h3>
-                    <p className="text-gray-500">{error}</p>
-                    <button 
-                        onClick={() => window.location.reload()} 
-                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                    >
-                        Try Again
-                    </button>
-                </div>
-            </div>
+                </motion.div>
+            </AppShell>
         );
     }
 

@@ -1,8 +1,30 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// app/admin/page.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { 
+  Users, 
+  UserCheck, 
+  BookOpen, 
+  TrendingUp, 
+  TrendingDown,
+  Activity,
+  BarChart3,
+  Clock,
+  ArrowUpRight,
+  ArrowDownRight,
+  Sparkles
+} from 'lucide-react';
+import { AppShell } from '@/app/components/shell/AppShell';
+import { Card } from '@/app/components/ui/card';
+import { Button } from '@/app/components/ui/button';
+import { 
+  staggerContainer, 
+  staggerItem, 
+  dashboardCardVariants,
+  fadeIn,
+  slideInFromTop
+} from '@/app/lib/motion';
 
 export default function AdminDashboard() {
     const [data, setData] = useState<any>(null);
@@ -17,198 +39,278 @@ export default function AdminDashboard() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
-                <div className="max-w-7xl mx-auto">
-                    <div className="animate-pulse space-y-8">
-                        {/* Header skeleton */}
-                        <div className="text-center">
-                            <div className="h-10 bg-slate-200 rounded-lg w-80 mx-auto mb-2"></div>
-                            <div className="h-4 bg-slate-200 rounded w-64 mx-auto"></div>
-                        </div>
+            <AppShell userRole="admin" userName="Admin User" userEmail="admin@nova.com">
+                <motion.div 
+                    className="space-y-8"
+                    variants={staggerContainer}
+                    initial="initial"
+                    animate="animate"
+                >
+                    {/* Header skeleton */}
+                    <motion.div className="text-center" variants={staggerItem}>
+                        <div className="h-12 bg-muted rounded-2xl w-96 mx-auto mb-4 animate-pulse"></div>
+                        <div className="h-6 bg-muted rounded-xl w-80 mx-auto animate-pulse"></div>
+                    </motion.div>
 
-                        {/* Cards skeleton */}
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                            {[1, 2, 3, 4, 5].map((i) => (
-                                <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-                                    <div className="h-4 bg-slate-200 rounded w-20 mb-3"></div>
-                                    <div className="h-8 bg-slate-200 rounded w-12"></div>
-                                </div>
-                            ))}
-                        </div>
+                    {/* Cards skeleton */}
+                    <motion.div 
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                        variants={staggerContainer}
+                    >
+                        {[1, 2, 3, 4].map((i) => (
+                            <motion.div key={i} variants={staggerItem}>
+                                <Card variant="nova" padding="lg" className="animate-pulse">
+                                    <div className="h-6 bg-muted rounded w-24 mb-4"></div>
+                                    <div className="h-12 bg-muted rounded w-16"></div>
+                                </Card>
+                            </motion.div>
+                        ))}
+                    </motion.div>
 
-                        {/* Activity skeleton */}
-                        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-                            <div className="h-6 bg-slate-200 rounded w-48 mb-6"></div>
+                    {/* Activity skeleton */}
+                    <motion.div variants={staggerItem}>
+                        <Card variant="nova" padding="lg" className="animate-pulse">
+                            <div className="h-8 bg-muted rounded w-48 mb-6"></div>
                             <div className="space-y-4">
                                 {[1, 2, 3, 4, 5].map((i) => (
-                                    <div key={i} className="border border-slate-200 rounded-lg p-4">
-                                        <div className="h-4 bg-slate-200 rounded w-full"></div>
-                                    </div>
+                                    <div key={i} className="h-16 bg-muted rounded-xl"></div>
                                 ))}
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </Card>
+                    </motion.div>
+                </motion.div>
+            </AppShell>
         );
     }
 
+    const stats = [
+        {
+            title: "Total Patrons",
+            value: data?.totalPatrons || 0,
+            icon: Users,
+            color: "from-blue-500 to-cyan-500",
+            change: "+12%",
+            trend: "up"
+        },
+        {
+            title: "Librarians",
+            value: data?.totalLibrarians || 0,
+            icon: UserCheck,
+            color: "from-purple-500 to-pink-500",
+            change: "+5%",
+            trend: "up"
+        },
+        {
+            title: "Library Items",
+            value: data?.totalItems || 0,
+            icon: BookOpen,
+            color: "from-emerald-500 to-teal-500",
+            change: "+8%",
+            trend: "up"
+        },
+        {
+            title: "Active Loans",
+            value: data?.issuedToday || 0,
+            icon: TrendingUp,
+            color: "from-orange-500 to-red-500",
+            change: "+15%",
+            trend: "up"
+        }
+    ];
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
-            <div className="max-w-7xl mx-auto space-y-8">
+        <AppShell userRole="admin" userName="Admin User" userEmail="admin@nova.com">
+            <motion.div 
+                className="space-y-8"
+                variants={staggerContainer}
+                initial="initial"
+                animate="animate"
+            >
                 {/* Header */}
-                <div className="text-center">
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+                <motion.div 
+                    className="text-center"
+                    variants={slideInFromTop}
+                >
+                    <motion.h1 
+                        className="text-5xl font-bold font-heading gradient-text mb-4"
+                        variants={fadeIn}
+                    >
                         Admin Dashboard
-                    </h1>
-                    <p className="text-slate-600">Manage your library operations and monitor activities</p>
-                </div>
+                    </motion.h1>
+                    <motion.p 
+                        className="text-xl text-muted-foreground font-medium"
+                        variants={fadeIn}
+                    >
+                        Welcome to the future of library management
+                    </motion.p>
+                </motion.div>
 
-                {/* Summary cards */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                    <Card
-                        title="Total Patrons"
-                        value={data.totalPatrons}
-                        icon="👥"
-                        gradient="from-blue-500 to-blue-600"
-                        bgGradient="from-blue-50 to-blue-100"
-                    />
-                    <Card
-                        title="Total Librarians"
-                        value={data.totalLibrarians}
-                        icon="👨‍💼"
-                        gradient="from-purple-500 to-purple-600"
-                        bgGradient="from-purple-50 to-purple-100"
-                    />
-                    <Card
-                        title="Total Items"
-                        value={data.totalItems}
-                        icon="📦"
-                        gradient="from-emerald-500 to-emerald-600"
-                        bgGradient="from-emerald-50 to-emerald-100"
-                    />
-                    <Card
-                        title="Issued Today"
-                        value={data.issuedToday}
-                        icon="📤"
-                        gradient="from-orange-500 to-orange-600"
-                        bgGradient="from-orange-50 to-orange-100"
-                    />
-                    <Card
-                        title="Returned Today"
-                        value={data.returnedToday}
-                        icon="📥"
-                        gradient="from-teal-500 to-teal-600"
-                        bgGradient="from-teal-50 to-teal-100"
-                    />
-                </div>
-
-                {/* Recent Activity */}
-                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
-                            <span className="text-white text-xl">⚡</span>
-                        </div>
-                        <div>
-                            <h2 className="text-xl font-semibold text-slate-800">Recent Activity</h2>
-                            <p className="text-slate-600 text-sm">Latest item transactions and user activities</p>
-                        </div>
-                    </div>
-
-                    <div className="space-y-3">
-                        {(data?.formattedActivity ?? []).map((activity: any, i: number) => {
-                            const isIssue = activity.type === 'issue';
-                            const userName = activity.userName || 'Unknown User';
-                            const itemTitle = activity.itemTitle || 'Unknown Item';
-                            const dateStr = activity.date
-                                ? new Date(activity.date).toLocaleString()
-                                : 'Unknown Date';
-
-                            return (
-                                <div key={i} className="group hover:shadow-md transition-all duration-200 border border-slate-200 rounded-lg p-4 bg-gradient-to-r from-white to-slate-50 hover:from-slate-50 hover:to-blue-50">
-                                    <div className="flex items-start gap-4">
-                                        {/* Icon */}
-                                        <div
-                                            className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 ${isIssue
-                                                ? 'bg-gradient-to-r from-orange-400 to-orange-500'
-                                                : 'bg-gradient-to-r from-teal-400 to-teal-500'
-                                                }`}
-                                        >
-                                            {isIssue ? '📤' : '📥'}
+                {/* Stats Grid */}
+                <motion.div 
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                    variants={staggerContainer}
+                >
+                    {stats.map((stat, index) => (
+                        <motion.div
+                            key={stat.title}
+                            variants={dashboardCardVariants}
+                            whileHover="hover"
+                        >
+                            <Card variant="nova" padding="lg" className="relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/5 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
+                                
+                                <div className="relative z-10">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                                            <stat.icon className="w-6 h-6 text-white" />
                                         </div>
-                                        {/* Text */}
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex flex-wrap items-center gap-1 text-sm">
-                                                <span className="text-sm text-gray-700">
-                                                    👤 {userName}
-                                                </span>
-                                                <span
-                                                    className={`px-2 py-1 rounded-full text-xs font-medium ${isIssue
-                                                        ? 'bg-orange-100 text-orange-700'
-                                                        : 'bg-teal-100 text-teal-700'
-                                                        }`}
-                                                >
-                                                    {isIssue ? 'issued' : 'returned'}
-                                                </span>
-                                                <span className="text-slate-600">the item</span>
-                                                <span className="font-semibold text-slate-800 bg-slate-100 px-2 py-1 rounded-md text-xs">
-                                                    {itemTitle}
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center gap-2 mt-2">
-                                                <span className="text-xs text-slate-500">
-                                                    🕒 {dateStr}
-                                                </span>
-                                            </div>
+                                        <div className="flex items-center space-x-1">
+                                            {stat.trend === 'up' ? (
+                                                <ArrowUpRight className="w-4 h-4 text-green-500" />
+                                            ) : (
+                                                <ArrowDownRight className="w-4 h-4 text-red-500" />
+                                            )}
+                                            <span className={`text-sm font-medium ${stat.trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+                                                {stat.change}
+                                            </span>
                                         </div>
                                     </div>
+                                    
+                                    <div className="space-y-2">
+                                        <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                                            {stat.title}
+                                        </h3>
+                                        <p className="text-3xl font-bold text-foreground">
+                                            {stat.value?.toLocaleString() || 0}
+                                        </p>
+                                    </div>
                                 </div>
-                            );
-                        })}
+                            </Card>
+                        </motion.div>
+                    ))}
+                </motion.div>
 
-                        {(data?.formattedActivity?.length ?? 0) === 0 && (
-                            <div className="text-center py-12">
-                                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <span className="text-2xl">📋</span>
-                                </div>
-                                <p className="text-slate-500">No recent activity to display</p>
+                {/* Recent Activity */}
+                <motion.div variants={staggerItem}>
+                    <Card variant="nova" padding="lg">
+                        <div className="flex items-center gap-4 mb-8">
+                            <div className="w-12 h-12 nova-gradient rounded-xl flex items-center justify-center shadow-nova">
+                                <Activity className="w-6 h-6 text-white" />
                             </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-        </div>
+                            <div>
+                                <h2 className="text-2xl font-bold font-heading text-foreground">Recent Activity</h2>
+                                <p className="text-muted-foreground">Latest transactions and user activities</p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            {(data?.formattedActivity ?? []).map((activity: any, i: number) => {
+                                const isIssue = activity.type === 'issue';
+                                const userName = activity.userName || 'Unknown User';
+                                const itemTitle = activity.itemTitle || 'Unknown Item';
+                                const dateStr = activity.date
+                                    ? new Date(activity.date).toLocaleString()
+                                    : 'Unknown Date';
+
+                                return (
+                                    <motion.div
+                                        key={i}
+                                        className="group p-4 rounded-xl border border-border/50 bg-card/50 hover:bg-card hover:border-border transition-all duration-300 hover:shadow-md"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: i * 0.1 }}
+                                        whileHover={{ scale: 1.02 }}
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                                                isIssue 
+                                                    ? 'bg-gradient-to-r from-orange-500 to-red-500' 
+                                                    : 'bg-gradient-to-r from-emerald-500 to-teal-500'
+                                            } shadow-lg`}>
+                                                {isIssue ? (
+                                                    <TrendingUp className="w-5 h-5 text-white" />
+                                                ) : (
+                                                    <TrendingDown className="w-5 h-5 text-white" />
+                                                )}
+                                            </div>
+                                            
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex flex-wrap items-center gap-2 text-sm">
+                                                    <span className="font-medium text-foreground">
+                                                        {userName}
+                                                    </span>
+                                                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                                        isIssue
+                                                            ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/20 dark:text-orange-300'
+                                                            : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300'
+                                                    }`}>
+                                                        {isIssue ? 'issued' : 'returned'}
+                                                    </span>
+                                                    <span className="text-muted-foreground">the item</span>
+                                                    <span className="font-semibold text-foreground bg-muted px-2 py-1 rounded-md text-xs">
+                                                        {itemTitle}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-2 mt-2">
+                                                    <Clock className="w-3 h-3 text-muted-foreground" />
+                                                    <span className="text-xs text-muted-foreground">
+                                                        {dateStr}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
+
+                            {(data?.formattedActivity?.length ?? 0) === 0 && (
+                                <motion.div 
+                                    className="text-center py-12"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.5 }}
+                                >
+                                    <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <BarChart3 className="w-8 h-8 text-muted-foreground" />
+                                    </div>
+                                    <p className="text-muted-foreground">No recent activity to display</p>
+                                </motion.div>
+                            )}
+                        </div>
+                    </Card>
+                </motion.div>
+
+                {/* Quick Actions */}
+                <motion.div 
+                    className="grid grid-cols-1 md:grid-cols-3 gap-6"
+                    variants={staggerContainer}
+                >
+                    {[
+                        { title: "Manage Librarians", description: "Add or remove librarian accounts", href: "/admin/librarians", icon: UserCheck },
+                        { title: "View Patrons", description: "Browse and manage patron accounts", href: "/admin/patrons", icon: Users },
+                        { title: "System Statistics", description: "View detailed analytics and reports", href: "/admin/statatics", icon: BarChart3 }
+                    ].map((action, index) => (
+                        <motion.div key={action.title} variants={staggerItem}>
+                            <Card variant="nova" padding="lg" className="group cursor-pointer hover:shadow-nova transition-all duration-300">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 nova-gradient rounded-xl flex items-center justify-center shadow-nova group-hover:scale-110 transition-transform duration-300">
+                                        <action.icon className="w-6 h-6 text-white" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-foreground group-hover:text-nova-primary transition-colors duration-300">
+                                            {action.title}
+                                        </h3>
+                                        <p className="text-sm text-muted-foreground">
+                                            {action.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            </Card>
+                        </motion.div>
+                    ))}
+                </motion.div>
+            </motion.div>
+        </AppShell>
     );
 }
 
-function Card({
-    title,
-    value,
-    icon,
-    gradient,
-    bgGradient
-}: {
-    title: string;
-    value: number;
-    icon: string;
-    gradient: string;
-    bgGradient: string;
-}) {
-    return (
-        <div className={`bg-gradient-to-br ${bgGradient} rounded-xl p-6 shadow-sm border border-white/50 hover:shadow-md transition-all duration-200 group cursor-pointer`}>
-            <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 bg-gradient-to-r ${gradient} rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-200`}>
-                    {icon}
-                </div>
-            </div>
-            <div className="space-y-1">
-                <div className="text-xs font-medium text-slate-600 uppercase tracking-wide">
-                    {title}
-                </div>
-                <div className={`text-2xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}>
-                    {value?.toLocaleString() || 0}
-                </div>
-            </div>
-        </div>
-    );
-}
