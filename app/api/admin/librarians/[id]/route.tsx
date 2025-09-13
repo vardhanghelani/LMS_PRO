@@ -44,18 +44,115 @@ export const GET = withRoleAuth(['admin'])(async (req: NextRequest, { params }: 
             }, { status: 400 });
         }
 
-        // For now, we'll skip complex relations to avoid Prisma issues
+        // Get items managed by this librarian
+        const itemsManaged = await prisma.library_items.findMany({
+            where: {
+                librarian_id: librarianId,
+                record_status: 'active'
+            },
+            select: {
+                item_id: true,
+                title: true,
+                author: true,
+                genre: true,
+                year: true,
+                _count: {
+                    select: {
+                        item_tran: {
+                            where: {
+                                record_status: 'active'
+                            }
+                        }
+                    }
+                }
+            },
+            orderBy: {
+                created_at: 'desc'
+            }
+        });
+
+        // Get approved transactions by this librarian
+        const approvedTransactions = await prisma.item_tran_history.findMany({
+            where: {
+                approved_by: librarianId,
+                status: 'issued'
+            },
+            select: {
+                id: true,
+                status: true,
+                approved_at: true,
+                library_items: {
+                    select: {
+                        title: true
+                    }
+                },
+                users_item_tran_history_requested_byTousers: {
+                    select: {
+                        name: true
+                    }
+                }
+            },
+            orderBy: {
+                approved_at: 'desc'
+            },
+            take: 20
+        });
+
+        // Get activity logs for this librarian
+        const logs = await prisma.logs.findMany({
+            where: {
+                user_id: librarianId
+            },
+            select: {
+                log_id: true,
+                description: true,
+                created_at: true
+            },
+            orderBy: {
+                created_at: 'desc'
+            },
+            take: 20
+        });
+
+        // Get notifications sent by this librarian
+        const notificationsSent = await prisma.notifications.findMany({
+            where: {
+                from_user_id: librarianId
+            },
+            select: {
+                notification_id: true,
+                message: true,
+                created_at: true
+            },
+            orderBy: {
+                created_at: 'desc'
+            },
+            take: 10
+        });
+
+        // Get notifications received by this librarian
+        const notificationsReceived = await prisma.notifications.findMany({
+            where: {
+                to_user_id: librarianId
+            },
+            select: {
+                notification_id: true,
+                message: true,
+                created_at: true
+            },
+            orderBy: {
+                created_at: 'desc'
+            },
+            take: 10
+        });
+
+        // Calculate summary statistics
         const summary = {
-            totalItemsManaged: 0,
-            totalApprovedTransactions: 0,
-            totalLogs: 0,
-            totalNotifications: 0
+            totalItemsManaged: itemsManaged.length,
+            totalApprovedTransactions: approvedTransactions.length,
+            totalLogs: logs.length,
+            totalNotifications: notificationsSent.length + notificationsReceived.length
         };
-        const itemsManaged: any[] = [];
-        const approvedTransactions: any[] = [];
-        const logs: any[] = [];
-        const notificationsSent: any[] = [];
-        const notificationsReceived: any[] = [];
 
         return NextResponse.json({
             success: true,
@@ -103,7 +200,13 @@ export const DELETE = withRoleAuth(['admin'])(async (req: NextRequest, { params 
                 user_id: true, 
                 name: true, 
                 email: true, 
-                role: true
+                role: true,
+                library_items: {
+                    where: {
+                        record_status: 'active'
+                    },
+                    select: { item_id: true, title: true }
+                }
             }
         });
 
@@ -121,8 +224,13 @@ export const DELETE = withRoleAuth(['admin'])(async (req: NextRequest, { params 
             }, { status: 400 });
         }
 
-        // For now, skip checking library items to avoid relation issues
-        // TODO: Add this check back when Prisma relations are working
+        // Check if librarian has any active library items
+        if (librarian.library_items.length > 0) {
+            return NextResponse.json({ 
+                success: false, 
+                message: `Cannot remove librarian. They are managing ${librarian.library_items.length} library items. Please reassign these items first.` 
+            }, { status: 400 });
+        }
 
         // Prevent admin from removing themselves
         if (librarianId === adminId) {
