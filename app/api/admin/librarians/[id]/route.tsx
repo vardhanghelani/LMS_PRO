@@ -193,20 +193,14 @@ export const DELETE = withRoleAuth(['admin'])(async (req: NextRequest, { params 
             }, { status: 400 });
         }
 
-        // Check if librarian exists
+        // Check if librarian exists and get basic info
         const librarian = await prisma.users.findUnique({
             where: { user_id: librarianId },
             select: { 
                 user_id: true, 
                 name: true, 
                 email: true, 
-                role: true,
-                library_items: {
-                    where: {
-                        record_status: 'active'
-                    },
-                    select: { item_id: true, title: true }
-                }
+                role: true
             }
         });
 
@@ -224,11 +218,20 @@ export const DELETE = withRoleAuth(['admin'])(async (req: NextRequest, { params 
             }, { status: 400 });
         }
 
+        // Check library items managed by this librarian
+        const managedItems = await prisma.library_items.findMany({
+            where: {
+                librarian_id: librarianId,
+                record_status: 'active'
+            },
+            select: { item_id: true, title: true }
+        });
+
         // Check if librarian has any active library items
-        if (librarian.library_items.length > 0) {
+        if (managedItems.length > 0) {
             return NextResponse.json({ 
                 success: false, 
-                message: `Cannot remove librarian. They are managing ${librarian.library_items.length} library items. Please reassign these items first.` 
+                message: `Cannot remove librarian. They are managing ${managedItems.length} library items. Please reassign these items first.` 
             }, { status: 400 });
         }
 
@@ -240,10 +243,10 @@ export const DELETE = withRoleAuth(['admin'])(async (req: NextRequest, { params 
             }, { status: 400 });
         }
 
-        // Soft delete - set status to inactive instead of hard delete
+        // Soft delete - set status to banned instead of hard delete
         await prisma.users.update({
             where: { user_id: librarianId },
-            data: { status: 'inactive' }
+            data: { status: 'banned' }
         });
 
         // Log the action (optional - skip if logs table has issues)
@@ -298,10 +301,10 @@ export const PUT = withRoleAuth(['admin'])(async (req: NextRequest, { params }: 
         }
 
         // Validate status if provided
-        if (status && !['active', 'inactive'].includes(status)) {
+        if (status && !['active', 'banned'].includes(status)) {
             return NextResponse.json({ 
                 success: false, 
-                message: "Invalid status. Must be 'active' or 'inactive'" 
+                message: "Invalid status. Must be 'active' or 'banned'" 
             }, { status: 400 });
         }
 

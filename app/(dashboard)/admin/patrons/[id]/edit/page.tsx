@@ -17,7 +17,7 @@ interface Patron {
     user_id: number;
     name: string;
     email: string;
-    status: 'active' | 'inactive';
+    status: 'active' | 'banned';
     created_at: string;
 }
 
@@ -33,7 +33,7 @@ export default function EditPatronPage() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        status: 'active' as 'active' | 'inactive'
+        status: 'active' as 'active' | 'banned'
     });
 
     useEffect(() => {
@@ -252,7 +252,7 @@ export default function EditPatronPage() {
                                 className="w-full px-4 py-4 bg-slate-700/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
                             >
                                 <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
+                                <option value="banned">Banned</option>
                             </select>
                         </div>
 

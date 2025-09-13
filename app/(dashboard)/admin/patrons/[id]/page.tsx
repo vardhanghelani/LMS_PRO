@@ -76,10 +76,10 @@ export default function PatronDetailsPage() {
     const getStatusBadge = (status: string) => {
         const statusConfig = {
             active: { bg: 'bg-green-100', text: 'text-green-800', icon: Check },
-            inactive: { bg: 'bg-gray-100', text: 'text-gray-800', icon: X },
+            banned: { bg: 'bg-red-100', text: 'text-red-800', icon: X },
             suspended: { bg: 'bg-red-100', text: 'text-red-800', icon: X },
         };
-        const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.inactive;
+        const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.banned;
         const Icon = config.icon;
         return (
             <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${config.bg} ${config.text}`}>

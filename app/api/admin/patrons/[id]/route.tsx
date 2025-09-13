@@ -17,16 +17,49 @@ export const GET = withRoleAuth(['admin'])(async (req: NextRequest, { params }: 
             }, { status: 400 });
         }
 
-        // Get patron basic info
+        // Get patron comprehensive info
         const patron = await prisma.users.findUnique({
             where: { user_id: patronId },
-            select: {
-                user_id: true,
-                name: true,
-                email: true,
-                role: true,
-                status: true,
-                created_at: true
+            include: {
+                fines: {
+                    orderBy: { created_at: 'desc' },
+                    take: 20
+                },
+                item_tran_history_item_tran_history_requested_byTousers: {
+                    include: {
+                        library_items: {
+                            select: {
+                                title: true,
+                                author: true
+                            }
+                        }
+                    },
+                    orderBy: { requested_at: 'desc' },
+                    take: 50
+                },
+                user_wishlist: {
+                    include: {
+                        library_items: {
+                            select: {
+                                title: true,
+                                author: true
+                            }
+                        }
+                    },
+                    orderBy: { created_at: 'desc' }
+                },
+                logs: {
+                    orderBy: { created_at: 'desc' },
+                    take: 30
+                },
+                notifications_notifications_to_user_idTousers: {
+                    orderBy: { created_at: 'desc' },
+                    take: 20
+                },
+                notifications_notifications_from_user_idTousers: {
+                    orderBy: { created_at: 'desc' },
+                    take: 20
+                }
             }
         });
 
@@ -44,10 +77,33 @@ export const GET = withRoleAuth(['admin'])(async (req: NextRequest, { params }: 
             }, { status: 400 });
         }
 
+        // Calculate statistics
+        const totalIssued = patron.item_tran_history_item_tran_history_requested_byTousers.length;
+        const totalReturned = patron.item_tran_history_item_tran_history_requested_byTousers.filter(item => item.status === 'returned').length;
+        const totalFines = patron.fines.reduce((sum, fine) => sum + parseFloat(fine.amount?.toString() || '0'), 0).toFixed(2);
+        const currentIssuedItems = patron.item_tran_history_item_tran_history_requested_byTousers
+            .filter(item => item.status === 'issued')
+            .map(item => ({
+                id: item.id,
+                date_due: item.date_due,
+                library_items: item.library_items
+            }));
+
+        // Add stats to patron object
+        const patronWithStats = {
+            ...patron,
+            stats: {
+                totalIssued,
+                totalReturned,
+                totalFines,
+                currentIssuedItems
+            }
+        };
+
         return NextResponse.json({
             success: true,
-            user: patron,
-            patron: patron // Add this for compatibility
+            user: patronWithStats,
+            patron: patronWithStats // Add this for compatibility
         });
 
     } catch (error) {
@@ -83,10 +139,10 @@ export const DELETE = withRoleAuth(['admin'])(async (req: NextRequest, { params 
                 name: true, 
                 email: true, 
                 role: true,
-                item_tran_history: {
+                item_tran_history_item_tran_history_requested_byTousers: {
                     where: {
                         status: {
-                            in: ['pending', 'approved', 'issued']
+                            in: ['pending', 'issued']
                         }
                     },
                     select: { id: true }
@@ -109,10 +165,10 @@ export const DELETE = withRoleAuth(['admin'])(async (req: NextRequest, { params 
         }
 
         // Check if patron has any active loans
-        if (patron.item_tran_history.length > 0) {
+        if (patron.item_tran_history_item_tran_history_requested_byTousers.length > 0) {
             return NextResponse.json({ 
                 success: false, 
-                message: `Cannot remove patron. They have ${patron.item_tran_history.length} active loans. Please ensure all items are returned first.` 
+                message: `Cannot remove patron. They have ${patron.item_tran_history_item_tran_history_requested_byTousers.length} active loans. Please ensure all items are returned first.` 
             }, { status: 400 });
         }
 
@@ -124,10 +180,10 @@ export const DELETE = withRoleAuth(['admin'])(async (req: NextRequest, { params 
             }, { status: 400 });
         }
 
-        // Soft delete - set status to inactive instead of hard delete
+        // Soft delete - set status to banned instead of hard delete
         await prisma.users.update({
             where: { user_id: patronId },
-            data: { status: 'inactive' }
+            data: { status: 'banned' }
         });
 
         // Log the action (optional - skip if logs table has issues)
@@ -182,10 +238,10 @@ export const PUT = withRoleAuth(['admin'])(async (req: NextRequest, { params }: 
         }
 
         // Validate status if provided
-        if (status && !['active', 'inactive'].includes(status)) {
+        if (status && !['active', 'banned'].includes(status)) {
             return NextResponse.json({ 
                 success: false, 
-                message: "Invalid status. Must be 'active' or 'inactive'" 
+                message: "Invalid status. Must be 'active' or 'banned'" 
             }, { status: 400 });
         }
 

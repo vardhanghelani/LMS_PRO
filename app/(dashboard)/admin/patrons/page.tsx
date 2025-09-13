@@ -25,7 +25,7 @@ type User = {
     user_id: number;
     name: string | null;
     email: string | null;
-    status: 'active' | 'inactive' | null;
+    status: 'active' | 'banned' | null;
     created_at: string;
 };
 
@@ -34,7 +34,7 @@ export default function PatronsPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
+    const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'banned'>('all');
     const [showRemoveDialog, setShowRemoveDialog] = useState(false);
     const [selectedPatron, setSelectedPatron] = useState<User | null>(null);
     const [removing, setRemoving] = useState(false);
@@ -75,7 +75,7 @@ export default function PatronsPage() {
     });
 
     const activeCount = patrons.filter(user => user.status === 'active').length;
-    const inactiveCount = patrons.filter(user => user.status === 'inactive').length;
+    const bannedCount = patrons.filter(user => user.status === 'banned').length;
 
     const handleRemovePatron = async () => {
         if (!selectedPatron) return;
@@ -107,7 +107,7 @@ export default function PatronsPage() {
 
     const handleToggleStatus = async (patron: User) => {
         try {
-            const newStatus = patron.status === 'active' ? 'inactive' : 'active';
+            const newStatus = patron.status === 'active' ? 'banned' : 'active';
             const response = await fetch(`/api/admin/patrons/${patron.user_id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -263,12 +263,12 @@ export default function PatronsPage() {
                                         <XCircle className="w-7 h-7 text-white" />
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">INACTIVE</div>
-                                        <div className="text-3xl font-bold text-amber-400">{inactiveCount}</div>
+                                        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">BANNED</div>
+                                        <div className="text-3xl font-bold text-amber-400">{bannedCount}</div>
                                     </div>
                                 </div>
                                 <div className="text-sm text-slate-400">Requires re-engagement</div>
-                                {inactiveCount > 0 && (
+                                {bannedCount > 0 && (
                                     <div className="flex items-center gap-2 mt-3">
                                         <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
                                         <span className="text-xs text-amber-400 font-medium">NEEDS ATTENTION</span>
@@ -332,14 +332,14 @@ export default function PatronsPage() {
                                             ACTIVE
                                         </button>
                                         <button
-                                            onClick={() => setStatusFilter('inactive')}
+                                            onClick={() => setStatusFilter('banned')}
                                             className={`px-5 py-3 rounded-xl font-medium transition-all duration-200 ${
-                                                statusFilter === 'inactive'
+                                                statusFilter === 'banned'
                                                     ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg'
                                                     : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 border border-slate-600'
                                             }`}
                                         >
-                                            INACTIVE
+                                            BANNED
                                         </button>
                                     </div>
                                 </div>
@@ -450,7 +450,7 @@ export default function PatronsPage() {
                                                         <div className={`w-2 h-2 rounded-full ${
                                                             isActive ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
                                                         }`}></div>
-                                                        {isActive ? 'ACTIVE' : 'INACTIVE'}
+                                                        {isActive ? 'ACTIVE' : 'BANNED'}
                                                     </div>
                                                 </div>
                                                 
