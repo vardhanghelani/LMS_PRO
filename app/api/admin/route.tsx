@@ -1,8 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient, notifications_type, notifications_status, record_status } from '@/generated/prisma';
 import { startOfDay, endOfDay } from 'date-fns';
+import { withRoleAuth } from '@/app/utils/authMiddleware';
 
-export async function GET() {
+export const GET = withRoleAuth(['admin'])(async (req: NextRequest) => {
     const today = new Date();
     const start = startOfDay(today);
     const end = endOfDay(today);
@@ -62,6 +63,7 @@ export async function GET() {
         }));
 
         return NextResponse.json({
+            success: true,
             totalPatrons,
             totalLibrarians,
             totalItems,
@@ -71,6 +73,11 @@ export async function GET() {
         });
     } catch (error) {
         console.error(error);
-        return NextResponse.json({ error: 'Failed to fetch dashboard data' }, { status: 500 });
+        return NextResponse.json({ 
+            success: false,
+            message: 'Failed to fetch dashboard data' 
+        }, { status: 500 });
+    } finally {
+        await prisma.$disconnect();
     }
-}
+});

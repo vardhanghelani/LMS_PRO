@@ -12,7 +12,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, variant = "default", animated = true, ...props }, ref) => {
     const variants = {
       default: "border-input bg-background hover:bg-accent hover:text-accent-foreground",
-      nova: "border-white/40 bg-transparent hover:border-white/60 focus:border-nova-primary focus:ring-ring/50",
+      nova: "border-white/40 bg-transparent hover:border-white/60 focus:border-nova-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50",
     };
 
     const checkboxElement = (

@@ -170,7 +170,7 @@ exports.Prisma.Library_itemsScalarFieldEnum = {
 exports.Prisma.FinesScalarFieldEnum = {
   fine_id: 'fine_id',
   user_id: 'user_id',
-  item_tran_history_id: 'item_tran_history_id',
+  item_tran_historyId: 'item_tran_historyId',
   amount: 'amount',
   reason: 'reason',
   status: 'status',

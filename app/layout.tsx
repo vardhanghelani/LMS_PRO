@@ -1,4 +1,4 @@
-import './globals.css';
+import './globals-simple.css';
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/app/components/providers/ThemeProvider';
 import { PageTransition } from '@/app/components/transitions/PageTransition';

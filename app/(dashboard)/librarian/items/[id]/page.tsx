@@ -3,7 +3,7 @@
 'use client';
 
 import { JSX, useEffect, useState } from "react";
-import { BookOpen, User, Hash, Calendar, Tag, FileText, Edit3, ArrowLeft, Trash2, MapPin, Globe, Clock, FileType, BookOpenCheck, Users } from 'lucide-react';
+import { BookOpen, User, Hash, Calendar, Tag, FileText, Edit3, ArrowLeft, Trash2, MapPin, Globe, Clock, FileType, BookOpenCheck, Users, Plus, X, AlertCircle } from 'lucide-react';
 import Link from "next/link";
 import ConfirmDialog from "@/app/components/ConfirmDialog";
 import { useParams } from 'next/navigation';
@@ -71,6 +71,17 @@ export default function ItemDetailPage() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMsg, setSnackbarMsg] = useState('');
     const [snackbarType, setSnackbarType] = useState<'success' | 'error' | 'info'>('info');
+    
+    // Manage Copies Modal State
+    const [showManageCopies, setShowManageCopies] = useState(false);
+    const [copies, setCopies] = useState<any[]>([]);
+    const [newCopyCount, setNewCopyCount] = useState(1);
+    const [isAddingCopies, setIsAddingCopies] = useState(false);
+    
+    // View History Modal State
+    const [showViewHistory, setShowViewHistory] = useState(false);
+    const [history, setHistory] = useState<any[]>([]);
+    const [historyFilter, setHistoryFilter] = useState<'all' | 'issued' | 'returned' | 'pending'>('all');
 
     useEffect(() => {
         const fetchItem = async () => {
@@ -79,6 +90,8 @@ export default function ItemDetailPage() {
                 const data = await res.json();
                 if (data.success) {
                     setItem(data.item);
+                    setCopies(data.item.copies || []);
+                    setHistory(data.item.history || []);
                 }
             } catch (error) {
                 console.error("Failed to load item:", error);
@@ -88,6 +101,92 @@ export default function ItemDetailPage() {
         };
         fetchItem();
     }, [itemId]);
+
+    // Calculate copy statistics
+    const calculateCopyStats = (copies: any[]) => {
+        const totalCopies = copies.length;
+        const availableCopies = copies.filter(copy => copy.status === 'available').length;
+        const issuedCopies = copies.filter(copy => copy.status === 'issued').length;
+        const reservedCopies = copies.filter(copy => copy.status === 'reserved').length;
+        
+        return { totalCopies, availableCopies, issuedCopies, reservedCopies };
+    };
+
+    // Manage Copies Functions
+    const handleAddCopies = async () => {
+        if (newCopyCount < 1) {
+            setSnackbarMsg('Please enter a valid number of copies');
+            setSnackbarType('error');
+            setSnackbarOpen(true);
+            return;
+        }
+
+        setIsAddingCopies(true);
+        try {
+            const res = await fetch(`/api/librarian/items/${itemId}/copies`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ count: newCopyCount })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                setSnackbarMsg(`Successfully added ${newCopyCount} copies`);
+                setSnackbarType('success');
+                setSnackbarOpen(true);
+                setNewCopyCount(1);
+                // Refresh the item data
+                const itemRes = await fetch(`/api/librarian/items/${itemId}`);
+                const itemData = await itemRes.json();
+                if (itemData.success) {
+                    setItem(itemData.item);
+                    setCopies(itemData.item.copies || []);
+                }
+            } else {
+                setSnackbarMsg(data.message || 'Failed to add copies');
+                setSnackbarType('error');
+                setSnackbarOpen(true);
+            }
+        } catch (error) {
+            console.error('Error adding copies:', error);
+            setSnackbarMsg('Failed to add copies');
+            setSnackbarType('error');
+            setSnackbarOpen(true);
+        } finally {
+            setIsAddingCopies(false);
+        }
+    };
+
+    const handleRemoveCopy = async (tranId: number) => {
+        try {
+            const res = await fetch(`/api/librarian/items/${itemId}/copies/${tranId}`, {
+                method: 'DELETE'
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                setSnackbarMsg('Copy removed successfully');
+                setSnackbarType('success');
+                setSnackbarOpen(true);
+                // Refresh the item data
+                const itemRes = await fetch(`/api/librarian/items/${itemId}`);
+                const itemData = await itemRes.json();
+                if (itemData.success) {
+                    setItem(itemData.item);
+                    setCopies(itemData.item.copies || []);
+                }
+            } else {
+                setSnackbarMsg(data.message || 'Failed to remove copy');
+                setSnackbarType('error');
+                setSnackbarOpen(true);
+            }
+        } catch (error) {
+            console.error('Error removing copy:', error);
+            setSnackbarMsg('Failed to remove copy');
+            setSnackbarType('error');
+            setSnackbarOpen(true);
+        }
+    };
 
     if (loading) {
         // return (
@@ -149,7 +248,7 @@ export default function ItemDetailPage() {
                                 <BookOpen className="w-8 h-8 text-white" />
                             </div>
                             <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                                <span className="text-white text-xs font-bold">{item.availableCopies}</span>
+                                <span className="text-white text-xs font-bold">{calculateCopyStats(copies).availableCopies}</span>
                             </div>
                         </div>
                         <div className="space-y-2">
@@ -164,10 +263,17 @@ export default function ItemDetailPage() {
                     {/* Status Bar */}
                     <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border-b border-slate-200/50 p-4">
                         <div className="flex flex-wrap gap-4 justify-center sm:justify-start">
-                            <StatusBadge label="Total" value={item.totalCopies} color="bg-slate-100 text-slate-700" />
-                            <StatusBadge label="Available" value={item.availableCopies} color="bg-green-100 text-green-700" />
-                            <StatusBadge label="Issued" value={item.issuedCopies} color="bg-orange-100 text-orange-700" />
-                            <StatusBadge label="Reserved" value={item.reservedCopies} color="bg-blue-100 text-blue-700" />
+                            {(() => {
+                                const stats = calculateCopyStats(copies);
+                                return (
+                                    <>
+                                        <StatusBadge label="Total" value={stats.totalCopies} color="bg-slate-100 text-slate-700" />
+                                        <StatusBadge label="Available" value={stats.availableCopies} color="bg-green-100 text-green-700" />
+                                        <StatusBadge label="Issued" value={stats.issuedCopies} color="bg-orange-100 text-orange-700" />
+                                        <StatusBadge label="Reserved" value={stats.reservedCopies} color="bg-blue-100 text-blue-700" />
+                                    </>
+                                );
+                            })()}
                         </div>
                     </div>
 
@@ -272,10 +378,10 @@ export default function ItemDetailPage() {
                             </div>
 
                             {/* Enhanced Copies Info */}
-                            <CopiesInfo copies={item.copies!} />
+                            <CopiesInfo copies={copies} />
 
                             {/* Enhanced History Table */}
-                            <HistoryTable history={item.history!} />
+                            <HistoryTable history={history} />
 
                             {/* Enhanced Actions */}
                             <ItemActions
@@ -287,6 +393,8 @@ export default function ItemDetailPage() {
                                 setSnackbarMsg={setSnackbarMsg}
                                 setSnackbarType={setSnackbarType}
                                 setSnackbarOpen={setSnackbarOpen}
+                                setShowViewHistory={setShowViewHistory}
+                                setShowManageCopies={setShowManageCopies}
                             />
                         </div>
                     </div>
@@ -335,6 +443,31 @@ export default function ItemDetailPage() {
 
                 {/* Snackbar */}
                 <Snackbar message={snackbarMsg} type={snackbarType} open={snackbarOpen} onClose={() => setSnackbarOpen(false)} />
+
+                {/* Manage Copies Modal */}
+                {showManageCopies && (
+                    <ManageCopiesModal
+                        item={item}
+                        copies={copies}
+                        newCopyCount={newCopyCount}
+                        setNewCopyCount={setNewCopyCount}
+                        isAddingCopies={isAddingCopies}
+                        onAddCopies={handleAddCopies}
+                        onRemoveCopy={handleRemoveCopy}
+                        onClose={() => setShowManageCopies(false)}
+                    />
+                )}
+
+                {/* View History Modal */}
+                {showViewHistory && (
+                    <ViewHistoryModal
+                        item={item}
+                        history={history}
+                        historyFilter={historyFilter}
+                        setHistoryFilter={setHistoryFilter}
+                        onClose={() => setShowViewHistory(false)}
+                    />
+                )}
             </div>
 
             <style jsx global>{`
@@ -512,6 +645,8 @@ export function ItemActions({
     setSnackbarMsg,
     setSnackbarType,
     setSnackbarOpen,
+    setShowViewHistory,
+    setShowManageCopies,
 }: {
     item: any,
     selectedItem: any,
@@ -521,6 +656,8 @@ export function ItemActions({
     setSnackbarMsg: any,
     setSnackbarType: any,
     setSnackbarOpen: any,
+    setShowViewHistory: any,
+    setShowManageCopies: any,
 }) {
     const handleDelete = async () => {
         try {
@@ -541,7 +678,8 @@ export function ItemActions({
                 setSnackbarType("error");
                 setSnackbarOpen(true);
             }
-        } catch (e) {
+        } catch (error) {
+            console.error("Delete error:", error);
             setSnackbarMsg("Server error during deletion");
             setSnackbarType("error");
             setSnackbarOpen(true);
@@ -574,13 +712,19 @@ export function ItemActions({
                 </button>
             </div>
 
-            {/* Enhanced feature buttons */}
+                            {/* Enhanced feature buttons */}
             <div className="mt-4 grid grid-cols-2 gap-3">
-                <button className="bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 px-4 py-3 rounded-xl hover:bg-white hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium">
+                <button 
+                    onClick={() => setShowViewHistory(true)}
+                    className="bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 px-4 py-3 rounded-xl hover:bg-white hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium"
+                >
                     <BookOpen className="w-4 h-4" />
                     View History
                 </button>
-                <button className="bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 px-4 py-3 rounded-xl hover:bg-white hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium">
+                <button 
+                    onClick={() => setShowManageCopies(true)}
+                    className="bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 px-4 py-3 rounded-xl hover:bg-white hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium"
+                >
                     <Users className="w-4 h-4" />
                     Manage Copies
                 </button>
@@ -602,6 +746,302 @@ export function ItemActions({
                     }}
                 />
             )}
+        </div>
+    );
+}
+
+// Manage Copies Modal Component
+function ManageCopiesModal({
+    item,
+    copies,
+    newCopyCount,
+    setNewCopyCount,
+    isAddingCopies,
+    onAddCopies,
+    onRemoveCopy,
+    onClose
+}: {
+    item: any,
+    copies: any[],
+    newCopyCount: number,
+    setNewCopyCount: (count: number) => void,
+    isAddingCopies: boolean,
+    onAddCopies: () => void,
+    onRemoveCopy: (tranId: number) => void,
+    onClose: () => void
+}) {
+    return (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-white">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                                <Users className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h2 className="text-2xl font-bold">Manage Copies</h2>
+                                <p className="text-indigo-100">{item?.title}</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={onClose}
+                            className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6 space-y-6 max-h-[calc(90vh-120px)] overflow-y-auto">
+                    {/* Add New Copies */}
+                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
+                        <h3 className="text-lg font-semibold text-green-800 mb-4 flex items-center gap-2">
+                            <Plus className="w-5 h-5" />
+                            Add New Copies
+                        </h3>
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                                <label className="text-green-700 font-medium">Number of copies:</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="100"
+                                    value={newCopyCount}
+                                    onChange={(e) => setNewCopyCount(parseInt(e.target.value) || 1)}
+                                    className="w-20 px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                />
+                            </div>
+                            <button
+                                onClick={onAddCopies}
+                                disabled={isAddingCopies}
+                                className="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+                            >
+                                {isAddingCopies ? (
+                                    <>
+                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        Adding...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Plus className="w-4 h-4" />
+                                        Add Copies
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Current Copies */}
+                    <div>
+                        <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                            <BookOpen className="w-5 h-5" />
+                            Current Copies ({copies.length})
+                        </h3>
+                        {copies.length === 0 ? (
+                            <div className="text-center py-8 bg-slate-50 rounded-xl">
+                                <BookOpen className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+                                <p className="text-slate-500 font-medium">No copies available</p>
+                                <p className="text-slate-400 text-sm">Add copies to track availability</p>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {copies.map((copy, index) => (
+                                    <div
+                                        key={copy.tran_id}
+                                        className="bg-white border border-slate-200 rounded-xl p-4 hover:shadow-md transition-shadow"
+                                    >
+                                        <div className="flex items-center justify-between mb-3">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                                    <span className="text-indigo-600 font-semibold text-sm">
+                                                        {index + 1}
+                                                    </span>
+                                                </div>
+                                                <span className="font-medium text-slate-800">
+                                                    Copy #{copy.tran_id}
+                                                </span>
+                                            </div>
+                                            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${
+                                                copy.status === 'available' ? 'bg-green-100 text-green-700' :
+                                                copy.status === 'issued' ? 'bg-orange-100 text-orange-700' :
+                                                copy.status === 'reserved' ? 'bg-blue-100 text-blue-700' :
+                                                'bg-slate-100 text-slate-700'
+                                            }`}>
+                                                {copy.status}
+                                            </span>
+                                        </div>
+                                        
+                                        {copy.user ? (
+                                            <div className="bg-slate-50 rounded-lg p-3 mb-3">
+                                                <p className="text-sm text-slate-600 mb-1">Currently with:</p>
+                                                <p className="font-medium text-slate-800">{copy.user.name}</p>
+                                                <p className="text-xs text-slate-500">{copy.user.email}</p>
+                                            </div>
+                                        ) : (
+                                            <div className="bg-green-50 rounded-lg p-3 mb-3">
+                                                <p className="text-sm text-green-700 font-medium">Available for borrowing</p>
+                                            </div>
+                                        )}
+
+                                        {copy.status === 'available' && (
+                                            <button
+                                                onClick={() => onRemoveCopy(copy.tran_id)}
+                                                className="w-full bg-red-50 hover:bg-red-100 text-red-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                                Remove Copy
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// View History Modal Component
+function ViewHistoryModal({
+    item,
+    history,
+    historyFilter,
+    setHistoryFilter,
+    onClose
+}: {
+    item: any,
+    history: any[],
+    historyFilter: 'all' | 'issued' | 'returned' | 'pending',
+    setHistoryFilter: (filter: 'all' | 'issued' | 'returned' | 'pending') => void,
+    onClose: () => void
+}) {
+    const filteredHistory = history.filter(h => 
+        historyFilter === 'all' || h.status === historyFilter
+    );
+
+    return (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-white">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                                <BookOpen className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h2 className="text-2xl font-bold">Transaction History</h2>
+                                <p className="text-indigo-100">{item?.title}</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={onClose}
+                            className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6 space-y-6 max-h-[calc(90vh-120px)] overflow-y-auto">
+                    {/* Filter */}
+                    <div className="flex items-center gap-4">
+                        <span className="text-slate-700 font-medium">Filter by status:</span>
+                        <div className="flex gap-2">
+                            {[
+                                { key: 'all', label: 'All', color: 'bg-slate-100 text-slate-700' },
+                                { key: 'issued', label: 'Issued', color: 'bg-blue-100 text-blue-700' },
+                                { key: 'returned', label: 'Returned', color: 'bg-green-100 text-green-700' },
+                                { key: 'pending', label: 'Pending', color: 'bg-orange-100 text-orange-700' }
+                            ].map(filter => (
+                                <button
+                                    key={filter.key}
+                                    onClick={() => setHistoryFilter(filter.key as any)}
+                                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                        historyFilter === filter.key 
+                                            ? filter.color + ' ring-2 ring-offset-2 ring-indigo-500'
+                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                    }`}
+                                >
+                                    {filter.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* History Table */}
+                    {filteredHistory.length === 0 ? (
+                        <div className="text-center py-12 bg-slate-50 rounded-xl">
+                            <AlertCircle className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+                            <p className="text-slate-500 font-medium">No history records found</p>
+                            <p className="text-slate-400 text-sm">
+                                {historyFilter === 'all' 
+                                    ? 'No transactions have been recorded for this item'
+                                    : `No ${historyFilter} transactions found`
+                                }
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead className="bg-slate-50 border-b border-slate-200">
+                                        <tr>
+                                            <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Status</th>
+                                            <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Requested By</th>
+                                            <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Requested At</th>
+                                            <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Date Issued</th>
+                                            <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Date Due</th>
+                                            <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Date Returned</th>
+                                            <th className="px-4 py-3 text-left text-sm font-semibold text-slate-700">Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-200">
+                                        {filteredHistory.map((h) => (
+                                            <tr key={h.id} className="hover:bg-slate-50 transition-colors">
+                                                <td className="px-4 py-3">
+                                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${
+                                                        h.status === 'approved' ? 'bg-green-100 text-green-700' :
+                                                        h.status === 'issued' ? 'bg-blue-100 text-blue-700' :
+                                                        h.status === 'returned' ? 'bg-slate-100 text-slate-700' :
+                                                        'bg-orange-100 text-orange-700'
+                                                    }`}>
+                                                        {h.status}
+                                                    </span>
+                                                </td>
+                                                <td className="px-4 py-3 font-medium text-slate-800">
+                                                    {h.requested_by?.name || '-'}
+                                                </td>
+                                                <td className="px-4 py-3 text-slate-600 text-sm">
+                                                    {h.requested_at ? new Date(h.requested_at).toLocaleString() : '-'}
+                                                </td>
+                                                <td className="px-4 py-3 text-slate-600 text-sm">
+                                                    {h.date_issued ? new Date(h.date_issued).toLocaleDateString() : '-'}
+                                                </td>
+                                                <td className="px-4 py-3 text-slate-600 text-sm">
+                                                    {h.date_due ? new Date(h.date_due).toLocaleDateString() : '-'}
+                                                </td>
+                                                <td className="px-4 py-3 text-slate-600 text-sm">
+                                                    {h.date_returned ? new Date(h.date_returned).toLocaleDateString() : '-'}
+                                                </td>
+                                                <td className="px-4 py-3 text-slate-600 text-sm">
+                                                    {h.remarks || '-'}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }

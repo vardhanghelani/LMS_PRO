@@ -1,6 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 'use client';
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { BookOpen, Users, Clock, CheckCircle, AlertTriangle, Calendar, User, Mail } from 'lucide-react';
 
 interface ItemIssueRecord {
     id: number;
@@ -124,211 +126,234 @@ export default function IssuePage() {
     const pendingCount = items.filter(item => item.status?.toLowerCase() === 'pending').length;
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Header */}
-                <div className="mb-8">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900">Issued Items</h1>
-                            <p className="mt-2 text-sm text-gray-600">
-                                Track and manage all currently issued library items
-                            </p>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                            <div className="bg-white px-4 py-2 rounded-lg shadow-sm border">
-                                <span className="text-sm font-medium text-gray-500">Total Issued</span>
-                                <div className="text-2xl font-bold text-blue-600">{issuedCount}</div>
-                            </div>
-                            <div className="bg-white px-4 py-2 rounded-lg shadow-sm border">
-                                <span className="text-sm font-medium text-gray-500">Pending</span>
-                                <div className="text-2xl font-bold text-yellow-600">{pendingCount}</div>
+        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-slate-100">
+            {/* Timeline Header */}
+            <motion.div 
+                className="bg-white/90 backdrop-blur-sm border-b border-emerald-200/50 sticky top-0 z-50"
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8 }}
+            >
+                <div className="max-w-7xl mx-auto px-8 py-6">
+                    <div className="flex items-center gap-6">
+                        {/* Timeline Connector */}
+                        <div className="w-4 h-4 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full shadow-lg flex-shrink-0"></div>
+                        <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h1 className="text-3xl font-bold text-slate-800">Issue Management Center</h1>
+                                    <p className="text-slate-600">Professional tracking for all library transactions</p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <motion.div 
+                                        className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-emerald-200/50 shadow-lg"
+                                        initial={{ scale: 0.8, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        transition={{ delay: 0.2 }}
+                                    >
+                                        <div className="text-center">
+                                            <div className="text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-1">ACTIVE ISSUES</div>
+                                            <div className="text-2xl font-bold text-emerald-700">{issuedCount}</div>
+                                        </div>
+                                    </motion.div>
+                                    <motion.div 
+                                        className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-amber-200/50 shadow-lg"
+                                        initial={{ scale: 0.8, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        transition={{ delay: 0.3 }}
+                                    >
+                                        <div className="text-center">
+                                            <div className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-1">PENDING</div>
+                                            <div className="text-2xl font-bold text-amber-700">{pendingCount}</div>
+                                        </div>
+                                    </motion.div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </motion.div>
+            
+            <div className="max-w-7xl mx-auto px-8 py-8">
 
-                {/* Content */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                {/* Timeline Issue Feed */}
+                <motion.div 
+                    className="space-y-6"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                >
                     {loading ? (
-                        <div className="flex items-center justify-center py-16">
-                            <div className="flex flex-col items-center space-y-4">
-                                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-                                <p className="text-gray-500 font-medium">Loading issued items...</p>
-                            </div>
+                        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-16 text-center border border-slate-200/50 shadow-lg">
+                            <div className="w-16 h-16 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto mb-4"></div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-2">Loading Issue Records</h3>
+                            <p className="text-slate-600">Gathering transaction history...</p>
                         </div>
                     ) : error ? (
-                        <div className="text-center py-16">
-                            <div className="mx-auto h-24 w-24 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                                <svg className="h-12 w-12 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-16 text-center border border-red-200/50 shadow-lg">
+                            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <AlertTriangle className="w-8 h-8 text-red-600" />
                             </div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Items</h3>
-                            <p className="text-gray-500 max-w-sm mx-auto">{error}</p>
+                            <h3 className="text-xl font-bold text-slate-800 mb-2">Connection Error</h3>
+                            <p className="text-slate-600 max-w-sm mx-auto">{error}</p>
                         </div>
                     ) : items.length === 0 ? (
-                        <div className="text-center py-16">
-                            <div className="mx-auto h-24 w-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                <svg className="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
+                        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-16 text-center border border-slate-200/50 shadow-lg">
+                            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <CheckCircle className="w-8 h-8 text-emerald-600" />
                             </div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Issued Items</h3>
-                            <p className="text-gray-500 max-w-sm mx-auto">
-                                There are no currently issued items. All items are available in the library.
+                            <h3 className="text-xl font-bold text-slate-800 mb-2">All Clear!</h3>
+                            <p className="text-slate-600 max-w-sm mx-auto">
+                                No active issues - all items are available in the library collection.
                             </p>
                         </div>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                            Item Details
-                                        </th>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                            Requested By
-                                        </th>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                            Approved By
-                                        </th>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                            Issue Date
-                                        </th>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                            Due Date
-                                        </th>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                            Status
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    {items.map((item, index) => (
-                                        <tr key={item.id} className={`hover:bg-gray-50 transition-colors duration-150 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-25'}`}>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center">
-                                                    <div className="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                                        {getItemTypeIcon(item.library_items?.item_type || '')}
-                                                    </div>
-                                                    <div className="ml-4">
-                                                        <div className="text-sm font-semibold text-gray-900">
-                                                            {item.library_items?.title || 'Unknown Title'}
-                                                        </div>
-                                                        <div className="text-xs text-gray-500">
-                                                            by {item.library_items?.author || 'Unknown Author'}
-                                                        </div>
-                                                        <div className="text-xs text-gray-400 capitalize">
-                                                            {item.library_items?.item_type || 'Unknown Type'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center">
-                                                    <div className="flex-shrink-0 h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
-                                                        <span className="text-xs font-medium text-gray-600">
-                                                            {item.users_item_tran_history_requested_byTousers?.name?.charAt(0)?.toUpperCase() || '?'}
-                                                        </span>
-                                                    </div>
-                                                    <div className="ml-3">
-                                                        <div className="text-sm font-medium text-gray-900">
-                                                            {item.users_item_tran_history_requested_byTousers?.name || '—'}
-                                                        </div>
-                                                        <div className="text-xs text-gray-500">
-                                                            {item.users_item_tran_history_requested_byTousers?.email || ''}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center">
-                                                    {item.users_item_tran_history_approved_byTousers?.name ? (
-                                                        <>
-                                                            <div className="flex-shrink-0 h-8 w-8 bg-green-200 rounded-full flex items-center justify-center">
-                                                                <span className="text-xs font-medium text-green-700">
-                                                                    {item.users_item_tran_history_approved_byTousers.name.charAt(0).toUpperCase()}
-                                                                </span>
+                        <div className="relative">
+                            {/* Timeline Layout with Cards */}
+                            <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-emerald-500 via-teal-500 to-emerald-500"></div>
+                            
+                            <div className="space-y-8">
+                                {items.map((item, index) => {
+                                    const isOverdue = item.date_due && new Date(item.date_due) < new Date();
+                                    const statusColor = item.status?.toLowerCase() === 'issued' ? 'emerald' : 
+                                                      item.status?.toLowerCase() === 'pending' ? 'amber' : 
+                                                      item.status?.toLowerCase() === 'approved' ? 'emerald' : 'slate';
+                                    
+                                    return (
+                                        <motion.div
+                                            key={item.id}
+                                            className="relative flex items-start gap-6"
+                                            initial={{ x: -50, opacity: 0 }}
+                                            animate={{ x: 0, opacity: 1 }}
+                                            transition={{ delay: index * 0.1 }}
+                                        >
+                                            {/* Timeline Node */}
+                                            <div className={`w-12 h-12 bg-gradient-to-r from-${statusColor}-500 to-${statusColor}-600 rounded-2xl flex items-center justify-center shadow-lg z-10 flex-shrink-0`}>
+                                                <BookOpen className="w-5 h-5 text-white" />
+                                            </div>
+                                            
+                                            {/* Timeline Card */}
+                                            <div className="flex-1 bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01] border-l-4 border-l-emerald-400">
+                                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                                    {/* Item Details */}
+                                                    <div className="lg:col-span-1">
+                                                        <div className="flex items-start gap-3">
+                                                            <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                                                <BookOpen className="w-6 h-6 text-emerald-600" />
                                                             </div>
-                                                            <div className="ml-3">
-                                                                <div className="text-sm font-medium text-gray-900">
-                                                                    {item.users_item_tran_history_approved_byTousers.name}
-                                                                </div>
-                                                                <div className="text-xs text-gray-500">
-                                                                    {formatDate(item.approved_at)}
+                                                            <div className="flex-1 min-w-0">
+                                                                <h3 className="font-bold text-slate-900 text-lg mb-1 leading-tight">
+                                                                    {item.library_items?.title || 'Unknown Title'}
+                                                                </h3>
+                                                                <p className="text-slate-600 text-sm mb-2">
+                                                                    by {item.library_items?.author || 'Unknown Author'}
+                                                                </p>
+                                                                <div className="inline-flex px-2 py-1 bg-slate-100 text-slate-700 rounded-md text-xs font-medium">
+                                                                    {item.library_items?.item_type || 'Unknown Type'}
                                                                 </div>
                                                             </div>
-                                                        </>
-                                                    ) : (
-                                                        <div className="flex items-center">
-                                                            <div className="flex-shrink-0 h-8 w-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                                                                <svg className="h-4 w-4 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                                </svg>
-                                                            </div>
-                                                            <div className="ml-3">
-                                                                <div className="text-sm font-medium text-gray-500">Pending</div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Transaction Details */}
+                                                    <div className="lg:col-span-1 space-y-4">
+                                                        {/* Patron */}
+                                                        <div>
+                                                            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">PATRON</div>
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+                                                                    <User className="w-4 h-4 text-teal-600" />
+                                                                </div>
+                                                                <div>
+                                                                    <div className="text-sm font-medium text-slate-900">
+                                                                        {item.users_item_tran_history_requested_byTousers?.name || 'Unknown User'}
+                                                                    </div>
+                                                                    <div className="text-xs text-slate-500">
+                                                                        {item.users_item_tran_history_requested_byTousers?.email || 'No email'}
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    )}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center">
-                                                    {item.date_issued ? (
-                                                        <>
-                                                            <div className="flex-shrink-0 h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                                                <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                                </svg>
+                                                        
+                                                        {/* Approved By */}
+                                                        <div>
+                                                            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">APPROVED BY</div>
+                                                            {item.users_item_tran_history_approved_byTousers?.name ? (
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+                                                                        <CheckCircle className="w-4 h-4 text-emerald-600" />
+                                                                    </div>
+                                                                    <div>
+                                                                        <div className="text-sm font-medium text-slate-900">
+                                                                            {item.users_item_tran_history_approved_byTousers.name}
+                                                                        </div>
+                                                                        <div className="text-xs text-slate-500">
+                                                                            {formatDate(item.approved_at)}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
+                                                                        <Clock className="w-4 h-4 text-amber-600" />
+                                                                    </div>
+                                                                    <div className="text-sm font-medium text-amber-700">Pending Approval</div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Dates & Status */}
+                                                    <div className="lg:col-span-1 space-y-4">
+                                                        {/* Dates */}
+                                                        <div className="grid grid-cols-1 gap-3">
+                                                            <div>
+                                                                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">ISSUE DATE</div>
+                                                                <div className="text-sm font-medium text-slate-900">
+                                                                    {item.date_issued ? formatDate(item.date_issued) : 'Not issued yet'}
+                                                                </div>
                                                             </div>
                                                             <div>
-                                                                <div className="text-sm font-medium text-gray-900">
-                                                                    {formatDate(item.date_issued)}
+                                                                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">DUE DATE</div>
+                                                                <div className={`text-sm font-medium ${
+                                                                    isOverdue ? 'text-red-600' : 'text-slate-900'
+                                                                }`}>
+                                                                    {item.date_due ? formatDate(item.date_due) : 'Not set'}
+                                                                    {isOverdue && (
+                                                                        <div className="inline-flex items-center gap-1 ml-2 px-2 py-1 bg-red-100 text-red-700 rounded-md text-xs font-bold">
+                                                                            <AlertTriangle className="w-3 h-3" />
+                                                                            OVERDUE
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                             </div>
-                                                        </>
-                                                    ) : (
-                                                        <div className="text-sm text-gray-500">—</div>
-                                                    )}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center">
-                                                    {item.date_due ? (
-                                                        <>
-                                                            <div className="flex-shrink-0 h-8 w-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
-                                                                <svg className="h-4 w-4 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                                </svg>
+                                                        </div>
+                                                        
+                                                        {/* Status */}
+                                                        <div>
+                                                            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">STATUS</div>
+                                                            <div className={`inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-bold ${
+                                                                item.status?.toLowerCase() === 'issued' ? 'bg-emerald-100 text-emerald-700' :
+                                                                item.status?.toLowerCase() === 'pending' ? 'bg-amber-100 text-amber-700' :
+                                                                item.status?.toLowerCase() === 'approved' ? 'bg-blue-100 text-blue-700' :
+                                                                'bg-slate-100 text-slate-700'
+                                                            }`}>
+                                                                {item.status?.toLowerCase() === 'issued' ? <CheckCircle className="w-4 h-4" /> :
+                                                                 item.status?.toLowerCase() === 'pending' ? <Clock className="w-4 h-4" /> :
+                                                                 <Calendar className="w-4 h-4" />}
+                                                                {item.status?.charAt(0)?.toUpperCase() + item.status?.slice(1)?.toLowerCase() || 'Unknown'}
                                                             </div>
-                                                            <div>
-                                                                <div className="text-sm font-medium text-gray-900">
-                                                                    {formatDate(item.date_due)}
-                                                                </div>
-                                                                {new Date(item.date_due) < new Date() && (
-                                                                    <div className="text-xs text-red-500 font-medium">Overdue</div>
-                                                                )}
-                                                            </div>
-                                                        </>
-                                                    ) : (
-                                                        <div className="text-sm text-gray-500">—</div>
-                                                    )}
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className={getStatusBadge(item.status)}>
-                                                    {item.status?.charAt(0)?.toUpperCase() + item.status?.slice(1)?.toLowerCase() || 'Unknown'}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                            </div>
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
                         </div>
                     )}
-                </div>
+                </motion.div>
             </div>
         </div>
     );

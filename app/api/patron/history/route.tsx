@@ -27,8 +27,9 @@ export const GET = withRoleAuth(['patron'])(async (req) => {
                         name: true,
                         email: true
                     }
-                },
-                fines:true
+                }
+                // TODO: Re-enable fines once database schema is properly migrated
+                // fines: true
             },
             orderBy: {
                 requested_at: 'desc'

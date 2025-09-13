@@ -79,16 +79,16 @@ model library_items {
 model fines {
   fine_id              Int               @id @default(autoincrement())
   user_id              Int?
-  item_tran_history_id Int?
+  item_tran_historyId  Int?              @map("item_tran_historyId")
   amount               Decimal?          @db.Decimal(10, 2)
   reason               String?           @db.Text
   status               fines_status?     @default(unpaid)
   created_at           DateTime?         @default(now()) @db.DateTime(0)
   paid_at              DateTime?         @db.DateTime(0)
   users                users?            @relation(fields: [user_id], references: [user_id], onDelete: Restrict, onUpdate: Restrict, map: "fines_ibfk_1")
-  item_tran_history    item_tran_history? @relation(fields: [item_tran_history_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  item_tran_history    item_tran_history? @relation(fields: [item_tran_historyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
 
-  @@index([item_tran_history_id], map: "item_tran_history_id")
+  @@index([item_tran_historyId], map: "item_tran_historyId")
   @@index([user_id], map: "user_id")
 }
 

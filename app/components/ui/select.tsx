@@ -13,7 +13,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ className, variant = "default", size = "default", animated = true, children, ...props }, ref) => {
     const variants = {
       default: "border-input bg-background hover:bg-accent hover:text-accent-foreground",
-      nova: "nova-glass border-white/20 text-white placeholder:text-white/60 focus:border-nova-primary focus:ring-ring/50",
+      nova: "nova-glass border-white/20 text-white placeholder:text-white/60 focus:border-nova-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50",
       ghost: "border-transparent bg-transparent hover:bg-accent focus:bg-accent",
     };
 

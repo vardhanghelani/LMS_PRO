@@ -49,15 +49,16 @@ export const POST = withRoleAuth(['patron'])(async (req) => {
             );
         }
 
-        const unpaidFine = await prisma.fines.findFirst({
-            where: { user_id: userId, status: 'unpaid' }
-            });
-            if (unpaidFine) {
-            return NextResponse.json(
-                { success: false, message: 'You have unpaid fines. Please clear them before borrowing.' },
-                { status: 403 }
-            );
-        }
+        // TODO: Re-enable fine checking once database schema is properly migrated
+        // const unpaidFine = await prisma.fines.findFirst({
+        //     where: { user_id: userId, status: 'unpaid' }
+        // });
+        // if (unpaidFine) {
+        //     return NextResponse.json(
+        //         { success: false, message: 'You have unpaid fines. Please clear them before borrowing.' },
+        //         { status: 403 }
+        //     );
+        // }
 
         // Check if user already has an active borrow request for this item
         const existingBorrowRequest = await prisma.item_tran_history.findFirst({
@@ -131,9 +132,20 @@ export const POST = withRoleAuth(['patron'])(async (req) => {
                     item_id: parseInt(item_id),
                     from_user_id: userId,
                     to_user_id: item.librarian_id,
-                    // Remove tran_id field as it's not related to item_tran
                     status: 'pending',
                     message: `Patron ${userEmail} has requested to borrow "${item.title}"`
+                }
+            });
+
+            // Create confirmation notification for patron
+            await tx.notifications.create({
+                data: {
+                    type: 'issue',
+                    item_id: parseInt(item_id),
+                    from_user_id: userId,
+                    to_user_id: userId,
+                    status: 'pending',
+                    message: `Your request to borrow "${item.title}" has been submitted and is awaiting approval.`
                 }
             });
 

@@ -5615,21 +5615,21 @@ export namespace Prisma {
   export type FinesAvgAggregateOutputType = {
     fine_id: number | null
     user_id: number | null
-    item_tran_history_id: number | null
+    item_tran_historyId: number | null
     amount: Decimal | null
   }
 
   export type FinesSumAggregateOutputType = {
     fine_id: number | null
     user_id: number | null
-    item_tran_history_id: number | null
+    item_tran_historyId: number | null
     amount: Decimal | null
   }
 
   export type FinesMinAggregateOutputType = {
     fine_id: number | null
     user_id: number | null
-    item_tran_history_id: number | null
+    item_tran_historyId: number | null
     amount: Decimal | null
     reason: string | null
     status: $Enums.fines_status | null
@@ -5640,7 +5640,7 @@ export namespace Prisma {
   export type FinesMaxAggregateOutputType = {
     fine_id: number | null
     user_id: number | null
-    item_tran_history_id: number | null
+    item_tran_historyId: number | null
     amount: Decimal | null
     reason: string | null
     status: $Enums.fines_status | null
@@ -5651,7 +5651,7 @@ export namespace Prisma {
   export type FinesCountAggregateOutputType = {
     fine_id: number
     user_id: number
-    item_tran_history_id: number
+    item_tran_historyId: number
     amount: number
     reason: number
     status: number
@@ -5664,21 +5664,21 @@ export namespace Prisma {
   export type FinesAvgAggregateInputType = {
     fine_id?: true
     user_id?: true
-    item_tran_history_id?: true
+    item_tran_historyId?: true
     amount?: true
   }
 
   export type FinesSumAggregateInputType = {
     fine_id?: true
     user_id?: true
-    item_tran_history_id?: true
+    item_tran_historyId?: true
     amount?: true
   }
 
   export type FinesMinAggregateInputType = {
     fine_id?: true
     user_id?: true
-    item_tran_history_id?: true
+    item_tran_historyId?: true
     amount?: true
     reason?: true
     status?: true
@@ -5689,7 +5689,7 @@ export namespace Prisma {
   export type FinesMaxAggregateInputType = {
     fine_id?: true
     user_id?: true
-    item_tran_history_id?: true
+    item_tran_historyId?: true
     amount?: true
     reason?: true
     status?: true
@@ -5700,7 +5700,7 @@ export namespace Prisma {
   export type FinesCountAggregateInputType = {
     fine_id?: true
     user_id?: true
-    item_tran_history_id?: true
+    item_tran_historyId?: true
     amount?: true
     reason?: true
     status?: true
@@ -5798,7 +5798,7 @@ export namespace Prisma {
   export type FinesGroupByOutputType = {
     fine_id: number
     user_id: number | null
-    item_tran_history_id: number | null
+    item_tran_historyId: number | null
     amount: Decimal | null
     reason: string | null
     status: $Enums.fines_status | null
@@ -5828,7 +5828,7 @@ export namespace Prisma {
   export type finesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     fine_id?: boolean
     user_id?: boolean
-    item_tran_history_id?: boolean
+    item_tran_historyId?: boolean
     amount?: boolean
     reason?: boolean
     status?: boolean
@@ -5843,7 +5843,7 @@ export namespace Prisma {
   export type finesSelectScalar = {
     fine_id?: boolean
     user_id?: boolean
-    item_tran_history_id?: boolean
+    item_tran_historyId?: boolean
     amount?: boolean
     reason?: boolean
     status?: boolean
@@ -5851,7 +5851,7 @@ export namespace Prisma {
     paid_at?: boolean
   }
 
-  export type finesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"fine_id" | "user_id" | "item_tran_history_id" | "amount" | "reason" | "status" | "created_at" | "paid_at", ExtArgs["result"]["fines"]>
+  export type finesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"fine_id" | "user_id" | "item_tran_historyId" | "amount" | "reason" | "status" | "created_at" | "paid_at", ExtArgs["result"]["fines"]>
   export type finesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | fines$usersArgs<ExtArgs>
     item_tran_history?: boolean | fines$item_tran_historyArgs<ExtArgs>
@@ -5866,7 +5866,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       fine_id: number
       user_id: number | null
-      item_tran_history_id: number | null
+      item_tran_historyId: number | null
       amount: Prisma.Decimal | null
       reason: string | null
       status: $Enums.fines_status | null
@@ -6245,7 +6245,7 @@ export namespace Prisma {
   interface finesFieldRefs {
     readonly fine_id: FieldRef<"fines", 'Int'>
     readonly user_id: FieldRef<"fines", 'Int'>
-    readonly item_tran_history_id: FieldRef<"fines", 'Int'>
+    readonly item_tran_historyId: FieldRef<"fines", 'Int'>
     readonly amount: FieldRef<"fines", 'Decimal'>
     readonly reason: FieldRef<"fines", 'String'>
     readonly status: FieldRef<"fines", 'fines_status'>
@@ -13959,7 +13959,7 @@ export namespace Prisma {
   export const FinesScalarFieldEnum: {
     fine_id: 'fine_id',
     user_id: 'user_id',
-    item_tran_history_id: 'item_tran_history_id',
+    item_tran_historyId: 'item_tran_historyId',
     amount: 'amount',
     reason: 'reason',
     status: 'status',
@@ -14605,7 +14605,7 @@ export namespace Prisma {
     NOT?: finesWhereInput | finesWhereInput[]
     fine_id?: IntFilter<"fines"> | number
     user_id?: IntNullableFilter<"fines"> | number | null
-    item_tran_history_id?: IntNullableFilter<"fines"> | number | null
+    item_tran_historyId?: IntNullableFilter<"fines"> | number | null
     amount?: DecimalNullableFilter<"fines"> | Decimal | DecimalJsLike | number | string | null
     reason?: StringNullableFilter<"fines"> | string | null
     status?: Enumfines_statusNullableFilter<"fines"> | $Enums.fines_status | null
@@ -14618,7 +14618,7 @@ export namespace Prisma {
   export type finesOrderByWithRelationInput = {
     fine_id?: SortOrder
     user_id?: SortOrderInput | SortOrder
-    item_tran_history_id?: SortOrderInput | SortOrder
+    item_tran_historyId?: SortOrderInput | SortOrder
     amount?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
@@ -14635,7 +14635,7 @@ export namespace Prisma {
     OR?: finesWhereInput[]
     NOT?: finesWhereInput | finesWhereInput[]
     user_id?: IntNullableFilter<"fines"> | number | null
-    item_tran_history_id?: IntNullableFilter<"fines"> | number | null
+    item_tran_historyId?: IntNullableFilter<"fines"> | number | null
     amount?: DecimalNullableFilter<"fines"> | Decimal | DecimalJsLike | number | string | null
     reason?: StringNullableFilter<"fines"> | string | null
     status?: Enumfines_statusNullableFilter<"fines"> | $Enums.fines_status | null
@@ -14648,7 +14648,7 @@ export namespace Prisma {
   export type finesOrderByWithAggregationInput = {
     fine_id?: SortOrder
     user_id?: SortOrderInput | SortOrder
-    item_tran_history_id?: SortOrderInput | SortOrder
+    item_tran_historyId?: SortOrderInput | SortOrder
     amount?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
@@ -14667,7 +14667,7 @@ export namespace Prisma {
     NOT?: finesScalarWhereWithAggregatesInput | finesScalarWhereWithAggregatesInput[]
     fine_id?: IntWithAggregatesFilter<"fines"> | number
     user_id?: IntNullableWithAggregatesFilter<"fines"> | number | null
-    item_tran_history_id?: IntNullableWithAggregatesFilter<"fines"> | number | null
+    item_tran_historyId?: IntNullableWithAggregatesFilter<"fines"> | number | null
     amount?: DecimalNullableWithAggregatesFilter<"fines"> | Decimal | DecimalJsLike | number | string | null
     reason?: StringNullableWithAggregatesFilter<"fines"> | string | null
     status?: Enumfines_statusNullableWithAggregatesFilter<"fines"> | $Enums.fines_status | null
@@ -15535,7 +15535,7 @@ export namespace Prisma {
   export type finesUncheckedCreateInput = {
     fine_id?: number
     user_id?: number | null
-    item_tran_history_id?: number | null
+    item_tran_historyId?: number | null
     amount?: Decimal | DecimalJsLike | number | string | null
     reason?: string | null
     status?: $Enums.fines_status | null
@@ -15556,7 +15556,7 @@ export namespace Prisma {
   export type finesUncheckedUpdateInput = {
     fine_id?: IntFieldUpdateOperationsInput | number
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_tran_historyId?: NullableIntFieldUpdateOperationsInput | number | null
     amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
@@ -15567,7 +15567,7 @@ export namespace Prisma {
   export type finesCreateManyInput = {
     fine_id?: number
     user_id?: number | null
-    item_tran_history_id?: number | null
+    item_tran_historyId?: number | null
     amount?: Decimal | DecimalJsLike | number | string | null
     reason?: string | null
     status?: $Enums.fines_status | null
@@ -15586,7 +15586,7 @@ export namespace Prisma {
   export type finesUncheckedUpdateManyInput = {
     fine_id?: IntFieldUpdateOperationsInput | number
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_tran_historyId?: NullableIntFieldUpdateOperationsInput | number | null
     amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
@@ -16603,7 +16603,7 @@ export namespace Prisma {
   export type finesCountOrderByAggregateInput = {
     fine_id?: SortOrder
     user_id?: SortOrder
-    item_tran_history_id?: SortOrder
+    item_tran_historyId?: SortOrder
     amount?: SortOrder
     reason?: SortOrder
     status?: SortOrder
@@ -16614,14 +16614,14 @@ export namespace Prisma {
   export type finesAvgOrderByAggregateInput = {
     fine_id?: SortOrder
     user_id?: SortOrder
-    item_tran_history_id?: SortOrder
+    item_tran_historyId?: SortOrder
     amount?: SortOrder
   }
 
   export type finesMaxOrderByAggregateInput = {
     fine_id?: SortOrder
     user_id?: SortOrder
-    item_tran_history_id?: SortOrder
+    item_tran_historyId?: SortOrder
     amount?: SortOrder
     reason?: SortOrder
     status?: SortOrder
@@ -16632,7 +16632,7 @@ export namespace Prisma {
   export type finesMinOrderByAggregateInput = {
     fine_id?: SortOrder
     user_id?: SortOrder
-    item_tran_history_id?: SortOrder
+    item_tran_historyId?: SortOrder
     amount?: SortOrder
     reason?: SortOrder
     status?: SortOrder
@@ -16643,7 +16643,7 @@ export namespace Prisma {
   export type finesSumOrderByAggregateInput = {
     fine_id?: SortOrder
     user_id?: SortOrder
-    item_tran_history_id?: SortOrder
+    item_tran_historyId?: SortOrder
     amount?: SortOrder
   }
 
@@ -19377,7 +19377,7 @@ export namespace Prisma {
     NOT?: finesScalarWhereInput | finesScalarWhereInput[]
     fine_id?: IntFilter<"fines"> | number
     user_id?: IntNullableFilter<"fines"> | number | null
-    item_tran_history_id?: IntNullableFilter<"fines"> | number | null
+    item_tran_historyId?: IntNullableFilter<"fines"> | number | null
     amount?: DecimalNullableFilter<"fines"> | Decimal | DecimalJsLike | number | string | null
     reason?: StringNullableFilter<"fines"> | string | null
     status?: Enumfines_statusNullableFilter<"fines"> | $Enums.fines_status | null
@@ -20626,7 +20626,7 @@ export namespace Prisma {
 
   export type finesUncheckedCreateWithoutUsersInput = {
     fine_id?: number
-    item_tran_history_id?: number | null
+    item_tran_historyId?: number | null
     amount?: Decimal | DecimalJsLike | number | string | null
     reason?: string | null
     status?: $Enums.fines_status | null
@@ -21403,7 +21403,7 @@ export namespace Prisma {
 
   export type finesCreateManyUsersInput = {
     fine_id?: number
-    item_tran_history_id?: number | null
+    item_tran_historyId?: number | null
     amount?: Decimal | DecimalJsLike | number | string | null
     reason?: string | null
     status?: $Enums.fines_status | null
@@ -21578,7 +21578,7 @@ export namespace Prisma {
 
   export type finesUncheckedUpdateWithoutUsersInput = {
     fine_id?: IntFieldUpdateOperationsInput | number
-    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_tran_historyId?: NullableIntFieldUpdateOperationsInput | number | null
     amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
@@ -21588,7 +21588,7 @@ export namespace Prisma {
 
   export type finesUncheckedUpdateManyWithoutUsersInput = {
     fine_id?: IntFieldUpdateOperationsInput | number
-    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_tran_historyId?: NullableIntFieldUpdateOperationsInput | number | null
     amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null

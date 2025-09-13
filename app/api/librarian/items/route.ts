@@ -10,7 +10,6 @@ export const GET = withRoleAuth(['librarian'])(async (req) => {
 
         const items = await prisma.library_items.findMany({
             where: {
-                librarian_id: librarianId,
                 record_status: 'active'
             },
             include: {

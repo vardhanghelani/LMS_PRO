@@ -1,8 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 /* eslint-disable @next/next/no-img-element */
 'use client';
 import ConfirmDialog from '@/app/components/ConfirmDialog';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { 
+    Heart, BookOpen, User, Calendar, MapPin, 
+    Trash2, Sparkles, Library, Star
+} from 'lucide-react';
+import { Button } from '@/app/components/ui/button';
+import { 
+    staggerContainer, 
+    staggerItem, 
+    fadeIn,
+    slideInFromTop
+} from '@/app/lib/motion';
 
 interface LibraryItem {
     item_id: number;
@@ -102,66 +114,76 @@ export default function FavoritesPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 p-6">
+        <div className="min-h-screen p-8">
             <div className="max-w-7xl mx-auto">
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                        <div className="p-3 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl shadow-lg">
-                            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                />
-                            </svg>
+                <motion.div
+                    variants={staggerContainer}
+                    initial="initial"
+                    animate="animate"
+                    className="space-y-8"
+                >
+                    {/* Header */}
+                    <motion.div 
+                        className="text-center"
+                        variants={slideInFromTop}
+                    >
+                        <div className="flex items-center justify-center gap-4 mb-6">
+                            <div className="w-16 h-16 nova-gradient rounded-2xl flex items-center justify-center shadow-lg">
+                                <Heart className="w-8 h-8 text-white" />
+                            </div>
+                            <div>
+                                <motion.h1 
+                                    className="text-5xl font-bold font-heading gradient-text"
+                                    variants={fadeIn}
+                                >
+                                    Favorite Items
+                                </motion.h1>
+                                <motion.p 
+                                    className="text-xl text-[#1E293B]/70 mt-2 font-medium"
+                                    variants={fadeIn}
+                                >
+                                    Your personal collection of beloved items
+                                </motion.p>
+                            </div>
                         </div>
-                        <div>
-                            <h1 className="text-4xl font-bold bg-gradient-to-r from-rose-700 to-pink-700 bg-clip-text text-transparent">
-                                Favorite Items
-                            </h1>
-                            <p className="text-slate-600 mt-2">Your personal collection of beloved items</p>
-                        </div>
-                    </div>
-                    {!loading && favorites.length > 0 && (
-                        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-200 inline-block">
-                            <div className="flex items-center gap-4">
-                                <div className="text-center">
-                                    <p className="text-slate-500 text-sm font-medium">Total Favorites</p>
-                                    <p className="text-3xl font-bold text-rose-600">{favorites.length}</p>
-                                </div>
-                                <div className="w-px h-12 bg-slate-300"></div>
-                                <div className="text-center">
-                                    <p className="text-slate-500 text-sm font-medium">Status</p>
-                                    <div className="flex items-center justify-center gap-1 text-lg font-semibold text-rose-600">
-                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
-                                        Curated
+                        {!loading && favorites.length > 0 && (
+                            <motion.div 
+                                className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-lg inline-block"
+                                variants={fadeIn}
+                            >
+                                <div className="flex items-center gap-6">
+                                    <div className="text-center">
+                                        <p className="text-[#1E293B]/70 text-sm font-medium">Total Favorites</p>
+                                        <p className="text-4xl font-bold text-[#1E293B]">{favorites.length}</p>
+                                    </div>
+                                    <div className="w-px h-12 bg-[#E2E8F0]"></div>
+                                    <div className="text-center">
+                                        <p className="text-[#1E293B]/70 text-sm font-medium">Status</p>
+                                        <div className="flex items-center justify-center gap-2 text-lg font-semibold text-[#4F46E5]">
+                                            <Star className="w-5 h-5" />
+                                            Curated
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-                {loading ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {[...Array(8)].map((_, i) => (
-                            <div key={i} className="bg-white rounded-2xl shadow-lg p-6 animate-pulse">
-                                <div className="w-full h-48 bg-slate-300 rounded-xl mb-4"></div>
-                                <div className="space-y-3">
-                                    <div className="h-6 bg-slate-300 rounded w-3/4"></div>
-                                    <div className="h-4 bg-slate-300 rounded w-1/2"></div>
-                                    <div className="h-6 bg-slate-300 rounded w-16"></div>
+                            </motion.div>
+                        )}
+                    </motion.div>
+                    {loading ? (
+                        <motion.div 
+                            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+                            variants={staggerItem}
+                        >
+                            {[...Array(8)].map((_, i) => (
+                                <div key={i} className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-lg animate-pulse">
+                                    <div className="w-full h-48 bg-[#E2E8F0] rounded-xl mb-4"></div>
+                                    <div className="space-y-3">
+                                        <div className="h-6 bg-[#E2E8F0] rounded w-3/4"></div>
+                                        <div className="h-4 bg-[#E2E8F0] rounded w-1/2"></div>
+                                        <div className="h-6 bg-[#E2E8F0] rounded w-16"></div>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </motion.div>
                 ) : favorites.length === 0 ? (
                     <div className="bg-white rounded-2xl shadow-xl p-12 text-center border border-slate-200">
                         <div className="w-24 h-24 mx-auto mb-6 bg-rose-100 rounded-full flex items-center justify-center">
@@ -305,7 +327,8 @@ export default function FavoritesPage() {
                             );
                         })}
                     </div>
-                )}
+                    )}
+                </motion.div>
             </div>
         </div>
     );

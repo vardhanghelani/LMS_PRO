@@ -8,27 +8,16 @@ export const GET = withRoleAuth(['librarian'])(
         const prisma = new PrismaClient();
 
         try {
-            // Find all patrons who have ever requested an item from this librarian
+            // Find all patrons who have role 'patron'
             const patrons = await prisma.users.findMany({
                 where: {
-                    item_tran_history_item_tran_history_requested_byTousers: {
-                        some: {
-                            library_items: {
-                                librarian_id: userId,
-                            },
-                        },
-                    },
+                    role: 'patron',
                 },
                 select: {
                     user_id: true,
                     name: true,
                     email: true,
                     item_tran_history_item_tran_history_requested_byTousers: {
-                        where: {
-                            library_items: {
-                                librarian_id: userId,
-                            },
-                        },
                         select: { id: true },
                     },
                 },

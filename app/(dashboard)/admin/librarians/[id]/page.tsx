@@ -32,7 +32,7 @@ interface Item {
 }
 
 interface Transaction {
-    tran_id: number;
+    id: number;
     status: string;
     library_items: { title: string };
     users_item_tran_history_requested_byTousers: { name: string };
@@ -40,13 +40,13 @@ interface Transaction {
 }
 
 interface Log {
-    id: number;
+    log_id: number;
     description: string;
     created_at: string;
 }
 
 interface Notification {
-    id: number;
+    notification_id: number;
     message: string;
     created_at: string;
 }
@@ -304,7 +304,7 @@ export default function LibrarianDetailsPage() {
                     {approvedTransactions.length > 0 ? (
                         <div className="space-y-4">
                             {approvedTransactions.map(tran => (
-                                <div key={tran.tran_id} className="border border-gray-200 rounded-lg p-4">
+                                <div key={tran.id} className="border border-gray-200 rounded-lg p-4">
                                     <div className="flex justify-between items-start mb-3">
                                         <div className="flex-1">
                                             <h4 className="font-medium text-gray-900">{tran.library_items.title}</h4>
@@ -345,7 +345,7 @@ export default function LibrarianDetailsPage() {
                         {logs.length > 0 ? (
                             <div className="space-y-3 max-h-96 overflow-y-auto">
                                 {logs.slice(0, 10).map(log => (
-                                    <div key={log.id} className="border-l-4 border-purple-200 pl-4 py-2">
+                                    <div key={log.log_id} className="border-l-4 border-purple-200 pl-4 py-2">
                                         <p className="text-gray-900 text-sm">{log.description}</p>
                                         <p className="text-gray-500 text-xs mt-1">
                                             {new Date(log.created_at).toLocaleString()}
@@ -375,7 +375,7 @@ export default function LibrarianDetailsPage() {
                             {notifications.sent.length > 0 ? (
                                 <div className="space-y-3 max-h-48 overflow-y-auto">
                                     {notifications.sent.slice(0, 5).map((n, index) => (
-                                        <div key={`${n.id}-${index}`} className="text-sm">
+                                        <div key={`${n.notification_id}-${index}`} className="text-sm">
                                             <p className="text-gray-900">{n.message}</p>
                                             <p className="text-gray-500 text-xs mt-1">
                                                 {new Date(n.created_at).toLocaleString()}
@@ -400,7 +400,7 @@ export default function LibrarianDetailsPage() {
                             {notifications.received.length > 0 ? (
                                 <div className="space-y-3 max-h-48 overflow-y-auto">
                                     {notifications.received.slice(0, 5).map((n, index) => (
-                                        <div key={`${n.id}-${index}`} className="text-sm">
+                                        <div key={`${n.notification_id}-${index}`} className="text-sm">
                                             <p className="text-gray-900">{n.message}</p>
                                             <p className="text-gray-500 text-xs mt-1">
                                                 {new Date(n.created_at).toLocaleString()}

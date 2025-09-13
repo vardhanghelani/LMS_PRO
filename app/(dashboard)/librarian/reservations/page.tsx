@@ -151,6 +151,11 @@ export default function ReservationsPage() {
             if (res.ok && data.success) {
                 showSnackbar(`Request ${confirmAction}d successfully!`, 'success');
                 fetchReservations(); // refresh request list after action
+                
+                // Refresh the dashboard if it exists
+                if ((window as any).refreshLibrarianDashboard) {
+                    (window as any).refreshLibrarianDashboard();
+                }
             } else {
                 showSnackbar(data.message || `Failed to ${confirmAction} request`, 'error');
             }
@@ -235,63 +240,63 @@ export default function ReservationsPage() {
 
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="p-8">
+            <div className="max-w-7xl mx-auto">
 
                 {/* Header */}
                 <div className="mb-8">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-900">Book Requests & Returns</h1>
-                            <p className="mt-2 text-sm text-gray-600">
+                            <h1 className="text-3xl font-bold text-[#1E293B]">Book Requests & Returns</h1>
+                            <p className="mt-2 text-sm text-[#1E293B]/60">
                                 Manage book issue requests and return approvals from library users
                             </p>
                         </div>
                         <div className="flex items-center space-x-3">
-                            <div className="bg-white px-4 py-2 rounded-lg shadow-sm border">
-                                <span className="text-sm font-medium text-gray-500">Total Requests</span>
-                                <div className="text-2xl font-bold text-gray-900">{reservations.length}</div>
+                            <div className="bg-white px-4 py-2 rounded-lg shadow-lg border border-[#E2E8F0]">
+                                <span className="text-sm font-medium text-[#1E293B]/60">Total Requests</span>
+                                <div className="text-2xl font-bold text-[#1E293B]">{reservations.length}</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Content */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+                <div className="bg-white rounded-xl shadow-lg border border-[#E2E8F0] overflow-x-auto">
                     {loading ? (
                         <div className="flex items-center justify-center py-16">
                             <div className="flex flex-col items-center space-y-4">
-                                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-yellow-600"></div>
-                                <p className="text-gray-500 font-medium">Loading requests...</p>
+                                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#4F46E5]"></div>
+                                <p className="text-[#1E293B]/60 font-medium">Loading requests...</p>
                             </div>
                         </div>
                     ) : reservations.length === 0 ? (
                         <div className="text-center py-16">
-                            <div className="mx-auto h-24 w-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                <svg className="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div className="mx-auto h-24 w-24 bg-[#E2E8F0] rounded-full flex items-center justify-center mb-4">
+                                <svg className="h-12 w-12 text-[#1E293B]/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10m8-14v10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             </div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Pending Requests</h3>
-                            <p className="text-gray-500 max-w-sm mx-auto">
+                            <h3 className="text-lg font-semibold text-[#1E293B] mb-2">No Pending Requests</h3>
+                            <p className="text-[#1E293B]/60 max-w-sm mx-auto">
                                 There are no book issue requests or return approvals pending at the moment. Check back later or refresh the page.
                             </p>
                         </div>
                     ) : (
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                        <table className="min-w-full divide-y divide-[#E2E8F0]">
+                            <thead className="bg-[#F8FAFC]">
                                 <tr>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Request Type</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Book Title</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Requested By</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Details</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-[#1E293B]/60 uppercase tracking-wider">Request Type</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-[#1E293B]/60 uppercase tracking-wider">Book Title</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-[#1E293B]/60 uppercase tracking-wider">Requested By</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-[#1E293B]/60 uppercase tracking-wider">Status</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-[#1E293B]/60 uppercase tracking-wider">Details</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-[#1E293B]/60 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
+                            <tbody className="bg-white divide-y divide-[#E2E8F0]">
                                 {reservations.map((item, index) => (
-                                    <tr key={item.id} className={`hover:bg-gray-50 transition-colors duration-150 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-25'}`}>
+                                    <tr key={item.id} className={`hover:bg-[#F8FAFC] transition-colors duration-150 ${index % 2 === 0 ? 'bg-white' : 'bg-[#F8FAFC]/30'}`}>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center ${getRequestType(item) === 'return'
@@ -309,7 +314,7 @@ export default function ReservationsPage() {
                                                     )}
                                                 </div>
                                                 <div className="ml-3">
-                                                    <div className="text-sm font-medium text-gray-900">{getRequestTypeDisplay(item)}</div>
+                                                    <div className="text-sm font-medium text-[#1E293B]">{getRequestTypeDisplay(item)}</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -321,19 +326,19 @@ export default function ReservationsPage() {
                                                     </svg>
                                                 </div>
                                                 <div className="ml-4">
-                                                    <div className="text-sm font-semibold text-gray-900">{item.books?.title || 'Unknown Title'}</div>
-                                                    <div className="text-sm text-gray-500">{item.books?.author || 'Unknown Author'}</div>
+                                                    <div className="text-sm font-semibold text-[#1E293B]">{item.library_items?.title || 'Unknown Title'}</div>
+                                                    <div className="text-sm text-[#1E293B]/60">{item.library_items?.author || 'Unknown Author'}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="flex-shrink-0 h-8 w-8 bg-indigo-200 rounded-full flex items-center justify-center">
-                                                    <span className="text-xs font-medium text-indigo-700">{item.users_book_tran_history_requested_byTousers?.name?.charAt(0)?.toUpperCase() || '?'}</span>
+                                                    <span className="text-xs font-medium text-indigo-700">{item.users_item_tran_history_requested_byTousers?.name?.charAt(0)?.toUpperCase() || '?'}</span>
                                                 </div>
                                                 <div className="ml-3">
-                                                    <div className="text-sm font-medium text-gray-900">{item.users_book_tran_history_requested_byTousers?.name || '—'}</div>
-                                                    <div className="text-sm text-gray-500">{item.requested_at ? new Date(item.requested_at).toLocaleDateString() : '—'}</div>
+                                                    <div className="text-sm font-medium text-[#1E293B]">{item.users_item_tran_history_requested_byTousers?.name || '—'}</div>
+                                                    <div className="text-sm text-[#1E293B]/60">{item.requested_at ? new Date(item.requested_at).toLocaleDateString() : '—'}</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -427,8 +432,8 @@ export default function ReservationsPage() {
                 }
                 message={
                     confirmAction === 'approve'
-                        ? `Are you sure you want to ${getRequestType(selectedReservation) === 'return' ? 'process the return' : 'approve the issue'} for "${selectedReservation?.books?.title || ''}"?`
-                        : `Are you sure you want to reject the ${getRequestType(selectedReservation)} for "${selectedReservation?.books?.title || ''}"?`
+                        ? `Are you sure you want to ${getRequestType(selectedReservation) === 'return' ? 'process the return' : 'approve the issue'} for "${selectedReservation?.library_items?.title || ''}"?`
+                        : `Are you sure you want to reject the ${getRequestType(selectedReservation)} for "${selectedReservation?.library_items?.title || ''}"?`
                 }
                 confirmText={
                     confirmAction === 'approve'
@@ -465,11 +470,11 @@ export default function ReservationsPage() {
                             <div className="mb-4 p-4 bg-white border border-blue-200 rounded-lg">
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-sm font-medium text-gray-700">Book Title:</span>
-                                    <span className="text-sm font-semibold text-gray-900">{selectedReservation?.books?.title}</span>
+                                    <span className="text-sm font-semibold text-gray-900">{selectedReservation?.library_items?.title}</span>
                                 </div>
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-sm font-medium text-gray-700">Returned By:</span>
-                                    <span className="text-sm font-semibold text-gray-900">{selectedReservation?.users_book_tran_history_requested_byTousers?.name}</span>
+                                    <span className="text-sm font-semibold text-gray-900">{selectedReservation?.users_item_tran_history_requested_byTousers?.name}</span>
                                 </div>
                                 {selectedReservation?.date_due && (
                                     <div className="flex items-center justify-between">

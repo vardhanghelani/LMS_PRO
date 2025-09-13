@@ -47,6 +47,7 @@
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "prisma": "^6.13.0",
+    "swc-loader": "^0.2.6",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

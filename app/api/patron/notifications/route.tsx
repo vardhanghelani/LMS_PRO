@@ -10,16 +10,15 @@ export const GET = withRoleAuth(['patron'])(async (req) => {
     }
 
     try {
-        const now = new Date();
-        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        // Get notifications from the last 30 days instead of just today
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
         const notifications = await prisma.notifications.findMany({
             where: {
                 to_user_id: req.user.userId,
                 created_at: {
-                    gte: startOfToday,
-                    lt: endOfToday,
+                    gte: thirtyDaysAgo,
                 },
             },
             include: {

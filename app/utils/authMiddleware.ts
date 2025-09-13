@@ -1,5 +1,9 @@
-import { verifyToken } from '@/app/utils/jwt';
-import { NextResponse } from 'next/server';
+import { verifyToken, JWTPayload } from '@/app/utils/jwt';
+import { NextResponse, NextRequest } from 'next/server';
+
+export interface AuthenticatedRequest extends NextRequest {
+    user?: JWTPayload;
+}
 
 export function withAuth(handler: (req: Request & { user?: any }, context?: any) => Promise<NextResponse>) {
     return async (req: any, context?: any) => {

@@ -1,51 +1,51 @@
-/* Nova Theme Design Tokens */
+/* Indigo + Cyan Theme Design Tokens */
 
 :root {
-  /* Colors - Light Theme */
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
+  /* Colors - Indigo + Cyan Light Theme */
+  --background: 228 33% 98%; /* near-white */
+  --foreground: 222 47% 11%;
   --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
+  --card-foreground: 222 47% 11%;
   --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
-  --primary: 262 83% 58%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 5.9% 10%;
-  --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
-  --accent: 240 4.8% 95.9%;
-  --accent-foreground: 240 5.9% 10%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 245 58% 56%; /* indigo-600 #4F46E5 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 189 94% 43%; /* cyan-500 #06B6D4 */
+  --secondary-foreground: 222 47% 11%;
+  --muted: 215 20% 65%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 316 73% 52%; /* fuchsia-500 #D946EF */
+  --accent-foreground: 0 0% 100%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
-  --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
-  --ring: 262 83% 58%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 245 58% 56%;
   --radius: 1rem;
   
-  /* Nova Specific Colors */
-  --nova-primary: 262 83% 58%;
-  --nova-secondary: 195 100% 50%;
-  --nova-accent: 320 100% 50%;
+  /* Indigo + Cyan Specific Colors */
+  --nova-primary: 245 58% 56%; /* #4F46E5 - Indigo */
+  --nova-secondary: 189 94% 43%; /* #06B6D4 - Cyan */
+  --nova-accent: 316 73% 52%; /* #D946EF - Fuchsia */
   --nova-success: 142 76% 36%;
   --nova-warning: 38 92% 50%;
   --nova-error: 0 84% 60%;
   --nova-info: 199 89% 48%;
   
-  /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
+  /* Indigo + Cyan Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(214, 32%, 91%, 0.3);
   --glass-backdrop: blur(16px);
   
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  --shadow-nova: 0 8px 32px 0 rgba(139, 92, 246, 0.37);
-  --shadow-nova-lg: 0 20px 40px 0 rgba(139, 92, 246, 0.2);
+  /* Indigo + Cyan Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(79 70 229 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(79 70 229 / 0.1), 0 1px 2px -1px rgb(79 70 229 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(79 70 229 / 0.1), 0 2px 4px -2px rgb(79 70 229 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(79 70 229 / 0.1), 0 4px 6px -4px rgb(79 70 229 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(79 70 229 / 0.1), 0 8px 10px -6px rgb(79 70 229 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(79 70 229 / 0.25);
+  --shadow-nova: 0 8px 32px 0 rgba(79, 70, 229, 0.15);
+  --shadow-nova-lg: 0 20px 40px 0 rgba(79, 70, 229, 0.1);
   
   /* Spacing */
   --space-xs: 0.25rem;
@@ -129,7 +129,7 @@
 
 /* Custom Properties for Components */
 .nova-gradient {
-  background: linear-gradient(135deg, hsl(var(--nova-primary)) 0%, hsl(var(--nova-secondary)) 50%, hsl(var(--nova-accent)) 100%);
+  background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);
 }
 
 .nova-glass {
@@ -202,6 +202,38 @@
   animation: nova-float 3s ease-in-out infinite;
 }
 
+/* Enhanced form styles */
+.form-section {
+  @apply space-y-6 border-b border-white/10 pb-6 last:border-b-0 last:pb-0;
+}
+
+.form-section-title {
+  @apply text-white font-semibold text-lg mb-2;
+}
+
+.form-section-description {
+  @apply text-white/70 text-sm;
+}
+
+/* Enhanced input focus states */
+.nova-input:focus-within {
+  @apply ring-2 ring-blue-500/50 border-blue-400/50;
+}
+
+/* Improved button hover effects */
+.nova-button-enhanced {
+  @apply transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-xl;
+}
+
+/* Better role selection cards */
+.role-card {
+  @apply transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1;
+}
+
+.role-card-selected {
+  @apply shadow-xl ring-2 ring-white/30;
+}
+
 .animate-nova-pulse {
   animation: nova-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -239,7 +271,7 @@
 
 /* Focus Styles */
 .focus-nova {
-  @apply focus:outline-none focus:ring-2 focus:ring-ring;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500;
 }
 
 /* Glassmorphism Components */
@@ -253,7 +285,7 @@
 
 /* Gradient Text */
 .gradient-text {
-  @apply bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent;
 }
 
 /* Hover Effects */

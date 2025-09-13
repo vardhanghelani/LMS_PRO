@@ -9,7 +9,7 @@ const inputVariants = cva(
     variants: {
       variant: {
         default: "border-input hover:border-primary/50 focus:border-primary",
-        nova: "nova-glass border-white/20 text-white placeholder:text-white/60 focus:border-nova-primary focus:ring-ring/50",
+        nova: "nova-glass border-white/20 text-white placeholder:text-white/60 focus:border-nova-primary focus:outline-none focus:ring-2 focus:ring-blue-500/50",
         ghost: "border-transparent bg-transparent hover:bg-accent focus:bg-accent",
       },
       size: {

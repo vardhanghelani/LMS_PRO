@@ -13,9 +13,6 @@ export const GET = withRoleAuth(['librarian'])(
             const returnedItems = await prisma.item_tran_history.findMany({
                 where: {
                     status: item_tran_history_status.returned,
-                    library_items: {
-                        librarian_id: userId,
-                    },
                 },
                 include: {
                     library_items: true,

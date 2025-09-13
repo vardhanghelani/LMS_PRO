@@ -15,7 +15,7 @@ const buttonVariants_cva = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-md hover:shadow-lg",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        nova: "bg-gradient-to-r from-nova-primary to-nova-secondary text-white hover:from-nova-secondary hover:to-nova-accent shadow-nova hover:shadow-nova-lg",
+        nova: "nova-gradient text-white shadow-lg hover:shadow-xl",
         glass: "nova-glass text-white hover:bg-opacity-20 shadow-lg hover:shadow-xl",
       },
       size: {

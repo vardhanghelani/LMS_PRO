@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import {
     BarChart,
     Bar,
@@ -13,6 +14,7 @@ import {
     LineChart,
     Line,
 } from 'recharts';
+import { BarChart3, TrendingUp, Users, Database, Activity, Shield, Eye, Target } from 'lucide-react';
 
 export default function AdminStatisticsPage() {
     const [data, setData] = useState<any>(null);
@@ -27,43 +29,50 @@ export default function AdminStatisticsPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
-                <div className="max-w-7xl mx-auto">
-                    <div className="animate-pulse space-y-8">
-                        <div className="text-center">
-                            <div className="h-10 bg-slate-200 rounded-lg w-96 mx-auto mb-2"></div>
-                            <div className="h-4 bg-slate-200 rounded w-64 mx-auto"></div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                            {[1, 2, 3, 4, 5].map((i) => (
-                                <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-                                    <div className="h-4 bg-slate-200 rounded w-20 mb-3"></div>
-                                    <div className="h-8 bg-slate-200 rounded w-12"></div>
-                                </div>
-                            ))}
-                        </div>
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-                                <div className="h-6 bg-slate-200 rounded w-48 mb-6"></div>
-                                <div className="h-64 bg-slate-100 rounded-lg"></div>
-                            </div>
-                        ))}
-                    </div>
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-slate-700 border-t-cyan-400 rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-slate-300 text-lg">Loading enterprise analytics...</p>
+                    <p className="text-slate-500 text-sm mt-2">Processing system metrics and KPIs</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
-            <div className="max-w-7xl mx-auto space-y-8">
-                {/* Header */}
-                <div className="text-center">
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-                        Comprehensive Statistics
-                    </h1>
-                    <p className="text-slate-600">Deep insights into your library operations and performance</p>
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+            {/* Corporate Analytics Header */}
+            <motion.div 
+                className="bg-slate-900/90 backdrop-blur-sm border-b border-slate-700 sticky top-0 z-50"
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8 }}
+            >
+                <div className="max-w-7xl mx-auto px-8 py-6">
+                    <div className="flex items-center gap-6">
+                        <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg">
+                            <BarChart3 className="w-7 h-7 text-slate-900" />
+                        </div>
+                        <div>
+                            <h1 className="text-2xl font-bold text-white">ENTERPRISE ANALYTICS CENTER</h1>
+                            <p className="text-slate-400 text-sm">Advanced System Metrics & Performance Intelligence</p>
+                        </div>
+                        <div className="ml-auto flex items-center gap-6">
+                            <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                                <span className="text-emerald-400 font-semibold text-sm">REAL-TIME DATA</span>
+                            </div>
+                            <div className="w-px h-6 bg-slate-700"></div>
+                            <div className="flex items-center gap-2">
+                                <Activity className="w-4 h-4 text-cyan-400" />
+                                <span className="text-slate-300 font-semibold text-sm">LIVE MONITORING</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </motion.div>
+            
+            <div className="max-w-7xl mx-auto px-8 py-8 space-y-8">
 
                 {/* ===== Overall Totals ===== */}
                 <section className="space-y-6">
@@ -418,34 +427,51 @@ export default function AdminStatisticsPage() {
 
 function SectionHeader({ icon, title, description }: { icon: string; title: string; description: string }) {
     return (
-        <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center">
-                <span className="text-white text-2xl">{icon}</span>
+        <motion.div 
+            className="flex items-center gap-4 mb-6"
+            initial={{ x: -50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.6 }}
+        >
+            <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-2xl flex items-center justify-center shadow-lg">
+                <span className="text-slate-900 text-xl font-bold">{icon}</span>
             </div>
-            <div>
-                <h2 className="text-2xl font-bold text-slate-800">{title}</h2>
-                <p className="text-slate-600">{description}</p>
+            <div className="flex-1">
+                <h2 className="text-2xl font-bold text-white uppercase tracking-wide">{title}</h2>
+                <p className="text-slate-400 text-sm">{description}</p>
             </div>
-        </div>
+            <div className="w-2 h-8 bg-gradient-to-b from-cyan-400 to-emerald-400 rounded-full"></div>
+        </motion.div>
     );
 }
 
 function ChartSection({ icon, title, description, children }: { icon: string; title: string; description: string; children: React.ReactNode }) {
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-            <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center">
-                    <span className="text-white text-xl">{icon}</span>
-                </div>
-                <div>
-                    <h3 className="text-xl font-semibold text-slate-800">{title}</h3>
-                    <p className="text-slate-600 text-sm">{description}</p>
+        <motion.div 
+            className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 overflow-hidden"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+        >
+            <div className="bg-slate-900/80 px-6 py-4 border-b border-slate-700">
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center">
+                        <span className="text-slate-900 text-xl font-bold">{icon}</span>
+                    </div>
+                    <div className="flex-1">
+                        <h3 className="text-xl font-bold text-white">{title}</h3>
+                        <p className="text-slate-400 text-sm">{description}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                        <span className="text-emerald-400 text-sm font-medium">LIVE</span>
+                    </div>
                 </div>
             </div>
-            <div className="bg-slate-50 rounded-lg p-4">
+            <div className="p-6 bg-slate-900/20">
                 {children}
             </div>
-        </div>
+        </motion.div>
     );
 }
 
@@ -462,22 +488,52 @@ function StatsCard({
     gradient: string;
     bgGradient: string;
 }) {
+    // Map gradients to corporate colors
+    const corporateGradients: { [key: string]: string } = {
+        'from-blue-500 to-blue-600': 'from-cyan-500 to-teal-500',
+        'from-purple-500 to-purple-600': 'from-indigo-500 to-purple-500',
+        'from-amber-500 to-amber-600': 'from-amber-500 to-orange-500',
+        'from-teal-500 to-teal-600': 'from-emerald-500 to-green-500',
+        'from-yellow-500 to-yellow-600': 'from-amber-400 to-yellow-500',
+        'from-red-500 to-red-600': 'from-red-500 to-pink-500',
+        'from-indigo-500 to-indigo-600': 'from-indigo-500 to-blue-500'
+    };
+    
+    const corporateGradient = corporateGradients[gradient] || gradient;
+    
     return (
-        <div className={`bg-gradient-to-br ${bgGradient} rounded-xl p-6 shadow-sm border border-white/50 hover:shadow-md transition-all duration-200 group`}>
-            <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 bg-gradient-to-r ${gradient} rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-200`}>
+        <motion.div 
+            className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:bg-slate-800/70 transition-all duration-300 group"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6 }}
+        >
+            <div className="flex items-center justify-between mb-6">
+                <div className={`w-14 h-14 bg-gradient-to-r ${corporateGradient} rounded-2xl flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                     {icon}
                 </div>
-            </div>
-            <div className="space-y-1">
-                <div className="text-sm font-medium text-slate-600 uppercase tracking-wide">
-                    {title}
-                </div>
-                <div className={`text-2xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}>
-                    {value}
+                <div className="text-right">
+                    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{title}</div>
+                    <div className="text-3xl font-bold text-white mt-1">{value}</div>
                 </div>
             </div>
-        </div>
+            
+            {/* Progress indicator */}
+            <div className="space-y-2">
+                <div className="flex justify-between text-xs text-slate-400">
+                    <span>Performance</span>
+                    <span>+12%</span>
+                </div>
+                <div className="w-full bg-slate-700 rounded-full h-2">
+                    <motion.div 
+                        className={`h-2 rounded-full bg-gradient-to-r ${corporateGradient}`}
+                        initial={{ width: 0 }}
+                        animate={{ width: '75%' }}
+                        transition={{ delay: 0.5, duration: 1 }}
+                    />
+                </div>
+            </div>
+        </motion.div>
     );
 }
 

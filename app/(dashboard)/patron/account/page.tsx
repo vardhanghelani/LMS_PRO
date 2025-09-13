@@ -1,6 +1,19 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { 
+    User, Mail, Phone, Calendar, MapPin, Shield, 
+    BookOpen, Heart, DollarSign, Edit3, Sparkles,
+    Library, TrendingUp, Award, Clock
+} from 'lucide-react';
+import { Button } from '@/app/components/ui/button';
+import { 
+    staggerContainer, 
+    staggerItem, 
+    fadeIn,
+    slideInFromTop
+} from '@/app/lib/motion';
 
 type User = {
     name: string;
@@ -60,15 +73,23 @@ export default function AccountDetails() {
 
     if (!user) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center p-6">
-                <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
-                    <div className="animate-pulse">
-                        <div className="w-24 h-24 bg-slate-300 rounded-full mx-auto mb-4"></div>
-                        <div className="h-6 bg-slate-300 rounded w-3/4 mx-auto mb-2"></div>
-                        <div className="h-4 bg-slate-300 rounded w-1/2 mx-auto"></div>
-                    </div>
-                    <p className="text-center mt-6 text-slate-600">Loading account details...</p>
-                </div>
+            <div className="min-h-screen flex items-center justify-center p-8">
+                <motion.div 
+                    className="text-center"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <motion.div 
+                        className="w-20 h-20 nova-gradient rounded-2xl flex items-center justify-center shadow-lg mx-auto mb-6"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                    >
+                        <User className="w-10 h-10 text-white" />
+                    </motion.div>
+                    <h2 className="text-2xl font-bold font-heading text-[#1E293B] mb-2">Loading Profile</h2>
+                    <p className="text-[#1E293B]/70 text-lg">Fetching your account details...</p>
+                </motion.div>
             </div>
         );
     }
@@ -83,184 +104,229 @@ export default function AccountDetails() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-6">
-            <div className="max-w-4xl mx-auto">
-                {/* Profile Header */}
-                <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-slate-200">
-                    <div className="flex justify-between items-start mb-8">
-                        <div className="text-center flex-1">
-                            <div className="relative inline-block">
-                                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center text-4xl font-bold shadow-xl border-4 border-white">
-                                    {user.name.charAt(0).toUpperCase()}
+        <div className="min-h-screen p-8">
+            <div className="max-w-6xl mx-auto">
+                <motion.div
+                    variants={staggerContainer}
+                    initial="initial"
+                    animate="animate"
+                    className="space-y-8"
+                >
+                    {/* Profile Header */}
+                    <motion.div 
+                        className="bg-white rounded-3xl p-8 border border-[#E2E8F0] shadow-lg"
+                        variants={slideInFromTop}
+                    >
+                        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+                            <div className="text-center lg:text-left">
+                                <div className="relative inline-block mb-6">
+                                    <div className="w-32 h-32 nova-gradient rounded-3xl flex items-center justify-center text-5xl font-bold shadow-lg border-4 border-white">
+                                        {user.name.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-[#06B6D4] rounded-full border-4 border-white flex items-center justify-center shadow-md">
+                                        <Shield className="w-5 h-5 text-white" />
+                                    </div>
                                 </div>
-                                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
-                                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                    </svg>
-                                </div>
+                                <motion.h1 
+                                    className="text-4xl font-bold font-heading gradient-text mb-3"
+                                    variants={fadeIn}
+                                >
+                                    Account Details
+                                </motion.h1>
+                                <motion.p 
+                                    className="text-xl text-[#1E293B]/70 font-medium"
+                                    variants={fadeIn}
+                                >
+                                    View your profile and library activity
+                                </motion.p>
                             </div>
-                            <h1 className="text-3xl font-bold text-slate-800 mt-4 mb-2">Account Details</h1>
-                            <p className="text-slate-600">View your profile and library activity</p>
+                            
+                            {/* Edit Profile Button */}
+                            <motion.div variants={fadeIn}>
+                                <Link href="/patron/account/edit">
+                                    <button className="px-8 py-4 text-lg nova-gradient text-white rounded-xl font-medium transition-colors flex items-center">
+                                        <Edit3 className="w-6 h-6 mr-3" />
+                                        Edit Profile
+                                    </button>
+                                </Link>
+                            </motion.div>
                         </div>
-                        
-                        {/* Edit Profile Button */}
-                        <Link 
-                            href="/patron/account/edit"
-                            className="group inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                        >
-                            <svg className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                            Edit Profile
-                        </Link>
-                    </div>
+                    </motion.div>
 
                     {/* User Information */}
-                    <div className="space-y-6">
+                    <motion.div 
+                        className="bg-white rounded-3xl p-8 border border-[#E2E8F0] shadow-lg"
+                        variants={staggerItem}
+                    >
+                        <motion.h2 
+                            className="text-3xl font-bold font-heading text-[#1E293B] mb-8"
+                            variants={fadeIn}
+                        >
+                            Personal Information
+                        </motion.h2>
+                        
                         <div className="grid md:grid-cols-2 gap-6">
-                            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                                <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                                    <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
+                            <motion.div 
+                                className="bg-[#F8FAFC] rounded-2xl p-6 border border-[#E2E8F0]"
+                                variants={staggerItem}
+                            >
+                                <label className="block text-sm font-semibold text-[#1E293B]/70 mb-3 flex items-center gap-3">
+                                    <User className="w-5 h-5 text-[#4F46E5]" />
                                     Full Name
                                 </label>
-                                <p className="text-xl font-bold text-slate-900">{user.name}</p>
-                            </div>
+                                <p className="text-2xl font-bold text-[#1E293B]">{user.name}</p>
+                            </motion.div>
 
-                            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                                <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                                    <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                    </svg>
+                            <motion.div 
+                                className="bg-[#F8FAFC] rounded-2xl p-6 border border-[#E2E8F0]"
+                                variants={staggerItem}
+                            >
+                                <label className="block text-sm font-semibold text-[#1E293B]/70 mb-3 flex items-center gap-3">
+                                    <Mail className="w-5 h-5 text-[#4F46E5]" />
                                     Email Address
                                 </label>
-                                <p className="text-xl font-bold text-slate-900">{user.email}</p>
-                            </div>
+                                <p className="text-2xl font-bold text-[#1E293B]">{user.email}</p>
+                            </motion.div>
                         </div>
 
                         {user.phone_number && (
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                                        <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                        </svg>
+                            <div className="grid md:grid-cols-2 gap-6 mt-6">
+                                <motion.div 
+                                    className="bg-[#F8FAFC] rounded-2xl p-6 border border-[#E2E8F0]"
+                                    variants={staggerItem}
+                                >
+                                    <label className="block text-sm font-semibold text-[#1E293B]/70 mb-3 flex items-center gap-3">
+                                        <Phone className="w-5 h-5 text-[#4F46E5]" />
                                         Phone Number
                                     </label>
-                                    <p className="text-xl font-bold text-slate-900">{user.phone_number}</p>
-                                </div>
+                                    <p className="text-2xl font-bold text-[#1E293B]">{user.phone_number}</p>
+                                </motion.div>
 
                                 {user.gender && (
-                                    <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                                        <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                                            <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                            </svg>
+                                    <motion.div 
+                                        className="bg-[#F8FAFC] rounded-2xl p-6 border border-[#E2E8F0]"
+                                        variants={staggerItem}
+                                    >
+                                        <label className="block text-sm font-semibold text-[#1E293B]/70 mb-3 flex items-center gap-3">
+                                            <User className="w-5 h-5 text-[#4F46E5]" />
                                             Gender
                                         </label>
-                                        <p className="text-xl font-bold text-slate-900 capitalize">{user.gender}</p>
-                                    </div>
+                                        <p className="text-2xl font-bold text-[#1E293B] capitalize">{user.gender}</p>
+                                    </motion.div>
                                 )}
                             </div>
                         )}
 
                         {user.birth_date && (
-                            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                                <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                                    <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
+                            <motion.div 
+                                className="bg-[#F8FAFC] rounded-2xl p-6 border border-[#E2E8F0] mt-6"
+                                variants={staggerItem}
+                            >
+                                <label className="block text-sm font-semibold text-[#1E293B]/70 mb-3 flex items-center gap-3">
+                                    <Calendar className="w-5 h-5 text-[#4F46E5]" />
                                     Birth Date
                                 </label>
-                                <p className="text-xl font-bold text-slate-900">
+                                <p className="text-2xl font-bold text-[#1E293B]">
                                     {new Date(user.birth_date).toLocaleDateString()}
                                 </p>
-                            </div>
+                            </motion.div>
                         )}
 
                         {user.address && (
-                            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                                <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                                    <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
+                            <motion.div 
+                                className="bg-[#F8FAFC] rounded-2xl p-6 border border-[#E2E8F0] mt-6"
+                                variants={staggerItem}
+                            >
+                                <label className="block text-sm font-semibold text-[#1E293B]/70 mb-3 flex items-center gap-3">
+                                    <MapPin className="w-5 h-5 text-[#4F46E5]" />
                                     Address
                                 </label>
-                                <p className="text-xl font-bold text-slate-900">{user.address}</p>
-                            </div>
+                                <p className="text-2xl font-bold text-[#1E293B]">{user.address}</p>
+                            </motion.div>
                         )}
 
-                        <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                            <label className="block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
-                                <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                                </svg>
+                        <motion.div 
+                            className="bg-[#F8FAFC] rounded-2xl p-6 border border-[#E2E8F0] mt-6"
+                            variants={staggerItem}
+                        >
+                            <label className="block text-sm font-semibold text-[#1E293B]/70 mb-4 flex items-center gap-3">
+                                <Shield className="w-5 h-5 text-[#4F46E5]" />
                                 Account Role
                             </label>
-                            <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold border-2 ${getRoleColor(user.role)}`}>
+                            <div className="inline-flex items-center px-6 py-3 bg-[#4F46E5]/10 text-[#4F46E5] rounded-full text-lg font-bold border border-[#4F46E5]/20">
                                 {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Library Stats */}
-                <div className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200">
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="p-2 bg-emerald-100 rounded-lg">
-                            <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
-                        </div>
-                        <h2 className="text-2xl font-bold text-slate-800">Library Statistics</h2>
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 text-center border border-blue-200 hover:shadow-lg transition-shadow">
-                            <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                </svg>
                             </div>
-                            <div className="text-3xl font-bold text-blue-600 mb-1">{stats.itemsRead}</div>
-                            <div className="text-sm font-medium text-blue-700">Items Read</div>
-                        </div>
+                        </motion.div>
+                    </motion.div>
 
-                        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 text-center border border-green-200 hover:shadow-lg transition-shadow">
-                            <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0h6M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-2" />
-                                </svg>
+                    {/* Library Stats */}
+                    <motion.div 
+                        className="bg-white rounded-3xl p-8 border border-[#E2E8F0] shadow-lg"
+                        variants={staggerItem}
+                    >
+                        <motion.div 
+                            className="flex items-center gap-4 mb-8"
+                            variants={fadeIn}
+                        >
+                            <div className="w-12 h-12 nova-gradient rounded-2xl flex items-center justify-center shadow-md">
+                                <TrendingUp className="w-6 h-6 text-white" />
                             </div>
-                            <div className="text-3xl font-bold text-green-600 mb-1">{stats.currentlyBorrowed}</div>
-                            <div className="text-sm font-medium text-green-700">Currently Borrowed</div>
-                        </div>
+                            <h2 className="text-3xl font-bold font-heading text-[#1E293B]">Library Statistics</h2>
+                        </motion.div>
 
-                        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 text-center border border-purple-200 hover:shadow-lg transition-shadow">
-                            <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </div>
-                            <div className="text-3xl font-bold text-purple-600 mb-1">{stats.favorites}</div>
-                            <div className="text-sm font-medium text-purple-700">Favorites</div>
-                        </div>
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                            <motion.div 
+                                className="bg-[#F8FAFC] rounded-2xl p-6 text-center border border-[#E2E8F0] hover:shadow-lg transition-all duration-300"
+                                variants={staggerItem}
+                                whileHover={{ scale: 1.05, y: -5 }}
+                            >
+                                <div className="w-16 h-16 bg-[#4F46E5]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#4F46E5]/20">
+                                    <BookOpen className="w-8 h-8 text-[#4F46E5]" />
+                                </div>
+                                <div className="text-4xl font-bold text-[#1E293B] mb-2">{stats.itemsRead}</div>
+                                <div className="text-[#1E293B]/70 font-medium">Items Read</div>
+                            </motion.div>
 
-                        <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-6 text-center border border-red-200 hover:shadow-lg transition-shadow">
-                            <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                                </svg>
-                            </div>
-                            <div className="text-3xl font-bold text-red-600 mb-1">
-                                ${Number(stats.totalFines).toFixed(2)}
-                            </div>
-                            <div className="text-sm font-medium text-red-700">Total Fines</div>
+                            <motion.div 
+                                className="bg-[#F8FAFC] rounded-2xl p-6 text-center border border-[#E2E8F0] hover:shadow-lg transition-all duration-300"
+                                variants={staggerItem}
+                                whileHover={{ scale: 1.05, y: -5 }}
+                            >
+                                <div className="w-16 h-16 bg-[#06B6D4]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#06B6D4]/20">
+                                    <Library className="w-8 h-8 text-[#06B6D4]" />
+                                </div>
+                                <div className="text-4xl font-bold text-[#1E293B] mb-2">{stats.currentlyBorrowed}</div>
+                                <div className="text-[#1E293B]/70 font-medium">Currently Borrowed</div>
+                            </motion.div>
+
+                            <motion.div 
+                                className="bg-[#F8FAFC] rounded-2xl p-6 text-center border border-[#E2E8F0] hover:shadow-lg transition-all duration-300"
+                                variants={staggerItem}
+                                whileHover={{ scale: 1.05, y: -5 }}
+                            >
+                                <div className="w-16 h-16 bg-[#D946EF]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#D946EF]/20">
+                                    <Heart className="w-8 h-8 text-[#D946EF]" />
+                                </div>
+                                <div className="text-4xl font-bold text-[#1E293B] mb-2">{stats.favorites}</div>
+                                <div className="text-[#1E293B]/70 font-medium">Favorites</div>
+                            </motion.div>
+
+                            <motion.div 
+                                className="bg-[#F8FAFC] rounded-2xl p-6 text-center border border-[#E2E8F0] hover:shadow-lg transition-all duration-300"
+                                variants={staggerItem}
+                                whileHover={{ scale: 1.05, y: -5 }}
+                            >
+                                <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-red-200">
+                                    <DollarSign className="w-8 h-8 text-red-600" />
+                                </div>
+                                <div className="text-4xl font-bold text-[#1E293B] mb-2">
+                                    ${Number(stats.totalFines).toFixed(2)}
+                                </div>
+                                <div className="text-[#1E293B]/70 font-medium">Total Fines</div>
+                            </motion.div>
                         </div>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
             </div>
         </div>
     );

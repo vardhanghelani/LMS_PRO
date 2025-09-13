@@ -11,9 +11,10 @@ const parseId = (idStr: string) => {
 
 // GET item details by ID (only active, authorized to librarian)
 export const GET = withRoleAuth(["librarian"])(
-    async (req: Request, { params }: { params: { id: string } }) => {
+    async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
         try {
-        const id = params.id;
+        const resolvedParams = await params;
+        const id = resolvedParams.id;
         const itemId = parseId(id);
         if (!itemId) {
             return NextResponse.json(
@@ -27,7 +28,6 @@ export const GET = withRoleAuth(["librarian"])(
         const item = await prisma.library_items.findFirst({
             where: {
                 item_id: itemId,
-                librarian_id: librarianId,
                 record_status: record_status.active,
             },
             include: {
@@ -151,11 +151,12 @@ export const GET = withRoleAuth(["librarian"])(
 
 // DELETE item if no issued copies or pending related records
 export const DELETE = withRoleAuth(["librarian"])(
-    async (req: Request, { params }: { params: { id: string } }) => {
+    async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
         try {
         const librarianId = (req as any).user?.userId;
         const librarianEmail = (req as any).user?.email;
-        const id = params.id;
+        const resolvedParams = await params;
+        const id = resolvedParams.id;
         const itemId = parseId(id);
 
         if (!itemId) {
@@ -173,11 +174,10 @@ export const DELETE = withRoleAuth(["librarian"])(
             );
         }
 
-        // Fetch item for current librarian
+        // Fetch item (allow any librarian to delete any item)
         const item = await prisma.library_items.findFirst({
             where: {
             item_id: itemId,
-            librarian_id: librarianId,
             record_status: record_status.active,
             },
             include: {

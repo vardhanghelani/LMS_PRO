@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Snackbar from '@/app/components/Snackbar';
 import ConfirmDialog from '@/app/components/ConfirmDialog';
 
@@ -29,6 +29,7 @@ interface LibraryItem {
 
 export default function ItemDetailPage() {
     const params = useParams();
+    const router = useRouter();
     const itemId = params.id as string;
     const [item, setItem] = useState<LibraryItem | null>(null);
     const [loading, setLoading] = useState(true);
@@ -122,7 +123,15 @@ export default function ItemDetailPage() {
             if (data.success) {
                 setBorrowSuccess(true);
                 setItem(prev => prev ? { ...prev, available_copies: prev.available_copies - 1 } : null);
-                showSnackbar('Borrow request submitted successfully', 'success');
+                showSnackbar('Borrow request submitted successfully! Redirecting to catalog...', 'success');
+                
+                // Navigate back to items list with success message after a delay
+                setTimeout(() => {
+                    const successMessage = encodeURIComponent(
+                        `Item "${item?.title}" has been requested successfully! You can check the status in your dashboard.`
+                    );
+                    router.push(`/patron/items?success=${successMessage}`);
+                }, 2500);
             } else {
                 setBorrowError(data.message || 'Failed to borrow item');
                 showSnackbar(data.message || 'Failed to borrow item', 'error');
